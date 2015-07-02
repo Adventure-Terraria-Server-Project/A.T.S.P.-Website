@@ -13,6 +13,9 @@
  * itsdangerous
  * pillow
 * Configure settings.py and conf.py to your needs
+* Put bootstrap and fontawesome .css files in static/css/
+* Put all the fonts of css in static/css/fonts/
+* Put JQuery, bootstrap and highstock in static/js/
 * run ``gunicorn -c settings.py app:app``
 * **Not everything will run 'as is'**
 
@@ -21,8 +24,10 @@
  * [Bootstrap]
    * [custom version]
  * [FontAwesome]
+ * [Highstock]
  * Dozen of other things
  * Magic
+
 
 ### Fonts
   * [Blocked]
@@ -131,3 +136,4 @@
 [shortcommands]:https://github.com/Stealownz/ShortCommands
 [kirika]:https://github.com/Nama/kirika/
 [shorturl]:https://gist.github.com/Nama/c318c92109c8bf5c52c9
+[highstock]:http://www.highcharts.com/stock/demo/
