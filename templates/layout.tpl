@@ -666,25 +666,6 @@
                         }
                     },
                     {
-                        name: 'Forum DB',
-                        color: '#001eff',
-                        lineWidth: 1,
-                        marker: { symbol: "circle", radius: 3 },
-                        data: {{backups[3]}},
-                        fillColor : {
-                            linearGradient : {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops : [
-                                [0, '#6d7eff'],
-                                [1, Highcharts.Color('#6d7eff').setOpacity(0).get('rgba')]
-                            ]
-                        }
-                    },
-                    {
                         name: 'Website DB',
                         color: '#ff8a00',
                         lineWidth: 1,
