@@ -167,7 +167,6 @@
                                 <li><a target="_blank" href="https://twitter.com/ATSPTerraria">Twitter</a></li>
                                 <li><a target="_blank" href="https://facebook.com/atsp.terraria">Facebook</a></li>
                                 <li><a target="_blank" href="https://tserverweb.com/terraria-server/285/">TServerWeb</a></li>
-                                <li><a target="_blank" href="http://tshock.co/xf/index.php?threads/dedicated-ssi-plugins-24-7-adventure-terraria-server-project-a-t-s-p.1687/">tShock thread</a></li>
                                 <li><a target="_blank" href="http://terraria-server-list.com/server/316/">Terraria Server List</a></li>
                             </ul>
                         </div>
@@ -182,9 +181,9 @@
                         <div class="col-md-4">
                             <ul>
                                 <li>Kaimei</li>
-                                <li><a target="_blank" href="http://tshock.co">tShock</a></li>
+                                <li><a target="_blank" href="http://tshock.co/xf/index.php?threads/dedicated-ssi-plugins-24-7-adventure-terraria-server-project-a-t-s-p.1687/">tShock</a></li>
                                 <li><a target="_blank" href="https://terraria.org">Terraria</a></li>
-                                <li><a target="_blank" href="http://vanillaforums.org">Vanilla Forums</a></li>
+                                <li><a target="_blank" href="https://github.com/Nama/A.T.S.P.-Website">Source on Github</a></li>
                             </ul>
                         </div>
                     </footer>

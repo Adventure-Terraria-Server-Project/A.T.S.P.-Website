@@ -1,21 +1,21 @@
 # Adventure Terraria Server Project - Website
 
 ## General
-I tried to keep the code pep8 conform via the help of SublimeLinter, but I ignored the max. line-length rule...
-The code is *as is* and I just removed some code I can't publish.
+I tried to keep the code pep8 conform via the help of SublimeLinter, but I ignored the max. line-length rule...  
+The code is *as is* and I just removed some code I can't publish.  
 You need some work and dependencies to make it run.
 
 ### Installation
 * Install at least Python 3.2 and VirtualEnv
-* Create a virtual environment and install following Python modules via pip
- * bcrypt
- * cymysql
- * flask
- * flask-login
- * gunicorn
- * httpagentparser
- * itsdangerous
- * pillow
+* Create a virtual environment and install following Python modules via pip (*newer and older version might run, but this is my current setup*)
+ * bcrypt 2.0.0
+ * cymysql 0.8.1
+ * flask 0.10.1
+ * flask-login 0.2.11
+ * gunicorn 19.3.0
+ * httpagentparser 1.7.7
+ * itsdangerous 0.24
+ * pillow 2.8.1
 * Configure settings.py and conf.py to your needs
 * Put bootstrap and fontawesome .css files in static/css/
 * Put all the fonts of css in static/css/fonts/
@@ -23,7 +23,7 @@ You need some work and dependencies to make it run.
 * Item-render are needed for the Inventory Parser. Extract the images from the game and put them in static/img/items/
 * run ``gunicorn -c settings.py app:app``
 
-### Used projects
+### Powered by
  * [Flask]
  * [Bootstrap]
    * [custom version]
