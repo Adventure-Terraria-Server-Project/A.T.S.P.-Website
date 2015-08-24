@@ -42,8 +42,8 @@
                                 <a target="_blank" class="btn btn-primary btn-sm" href="https://steamcommunity.com/groups/a_t_s_p"><i class="fa fa-steam-square fa-lg"></i> <strong>Join</strong> Steam Group</a>
                                 <a target="_blank" class="btn btn-primary btn-sm" href="https://facebook.com/atsp.terraria"><i class="fa fa-facebook-square fa-lg"></i> <strong>Like</strong> on Facebook</a>
                                 <a class="btn btn-success btn-sm" href="https://steamcommunity.com/groups/a_t_s_p/discussions/0/617335934135454248/"><span class="glyphicon glyphicon-gift"></span> <strong>Donate</strong> to support <strong>A.T.S.P.</strong></a>
-                                <a class="btn btn-primary btn-sm" href="/vote_terrariaservers" {% if user_data['user'][0] == 'Login' %}title="Login, to get ingame rewards for your Votes!"{% endif %}><span class="glyphicon glyphicon-thumbs-up"></span> <strong>Vote</strong> on Terraria-Servers</a>
-                                <a class="btn btn-primary btn-sm" href="/vote_tserverweb" {% if user_data['user'][0] == 'Login' %}title="Login, to get ingame rewards for your Votes!"{% else %}title="You must be ingame at this time to vote!"{% endif %}><span class="glyphicon glyphicon-star"></span> <strong>Vote</strong> on TServerWeb</a>
+                                <a target="_blank" class="btn btn-primary btn-sm" href="http://terraria-servers.com/server/7/vote/"><span class="glyphicon glyphicon-thumbs-up"></span> <strong>Vote</strong> on Terraria-Servers</a>
+                                <a target="_blank" class="btn btn-primary btn-sm" href="http://www.tserverweb.com/terraria-server/285/like/"><span class="glyphicon glyphicon-star"></span> <strong>Vote</strong> on TServerWeb</a>
                             </div>
                         </div>
                     </div>
@@ -66,12 +66,9 @@
                                 <a class="btn btn-success" data-toggle="modal" href="#listModal"><i class="fa fa-eject fa-lg"></i> Vote</a>
                             </div>
                             <div class="col-xs-12 btn-group btn-group-justified">
-                                <a target="_blank" class="btn btn-primary" href="/vote_terrariaservers"><span class="glyphicon glyphicon-thumbs-up"></span> TerrariaServers</a>
-                                <a target="_blank" class="btn btn-primary" href="/vote_tserverweb"><span class="glyphicon glyphicon-star"></span> TServerWeb</a>
+                                <a target="_blank" class="btn btn-primary" href="http://terraria-servers.com/server/7/vote/"><span class="glyphicon glyphicon-thumbs-up"></span> TerrariaServers</a>
+                                <a target="_blank" class="btn btn-primary" href="http://www.tserverweb.com/terraria-server/285/like/"><span class="glyphicon glyphicon-star"></span> TServerWeb</a>
                             </div>
-                            {% if user_data['user'][0] == 'Login' %}<div class="col-xs-12">
-                                <div class="alert alert-warning" role="alert"><strong>Login</strong>, to get <strong>ingame rewards</strong> for your Votes!</div>
-                            </div>{% endif %}
                         </div>
                     </div>
                 </div>{% endif %}

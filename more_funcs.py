@@ -18,6 +18,7 @@ from db_funcs import get_player_inv_sig
 from db_funcs import get_user_by_name
 from flask import json
 from random import shuffle
+from textwrap import dedent
 from time import time
 
 global recents
@@ -44,10 +45,11 @@ def sliderc():
                 indiactive = 'class="active"'
             thumb = imageres(files)
             indicator += '                                <li data-target="#carousel" data-slide-to="%s" %s></li>\n' % (count, indiactive)
-            slider += '''    <div class="item %s">
+            slider += dedent('''
+                             <div class="item %s">
                                  <a href="slider/full/%s" target="_blank"><img alt="Screenshot" src="slider/%s" ></a>
                              </div>
-''' % (active, files, thumb)
+                             ''') % (active, files, thumb)
             count += 1
             active = ''
             indiactive = ''
@@ -150,7 +152,7 @@ def player_list():
         for i in p_list1:
             p_ltemp = i.lstrip(' ')
             if os.path.exists(r'static/img/Char Renders/%s.png' % p_ltemp):
-                p_list += '<span class="render" style="whitespace: nowrap"><img alt="Character Picture" title="%s" src="Char%20Renders/%s.png"></span>' % (p_ltemp, p_ltemp)
+                p_list += '<span class="render" style="whitespace: nowrap"><img alt="Character Picture" title="{0}" src="Char%20Renders/{1}.png"></span>'.format(p_ltemp, p_ltemp)
             else:
                 p_list += '<span class="render" style="whitespace: nowrap"><img title="%s" src="guest.png"></span>' % p_ltemp
         player = {'p_count': p_count, 'p_list': p_list}
@@ -168,27 +170,28 @@ def online_invpars():
         p_id = 0
         for i in p_list1:
             if os.path.exists(r'static/img/Char Renders/%s.png' % i['nickname']) and i['group'] != 'guest':
-                p_list += '''
-                    <div class="panel panel-default">
-                        <div class="panel-heading" data-toggle="collapse" data-parent="#pinv" data-target="#%s">
-                            <h4 class="panel-title">
-                                <div class="row">
-                                    <div class="col-md-6 text-center">
-                                        <img  src="Char Renders/%s.png">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p class="text-warning"><span class="text-danger glyphicon glyphicon-heart"></span> %s <span class="text-primary glyphicon glyphicon-star"></span> %s <i class="text-info fa fa-users"></i> %s</p>
-                                        <p class="text-warning"><span class="text-success glyphicon glyphicon-user"></span> %s <span class="text-success glyphicon glyphicon-globe"></span> %s</p>
-                                    </div>
-                                </div>
-                            </h4>
-                        </div>
-                        <div id="%s" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <table class="table table-bordered"><tr>%s</tr></table>
-                            </div>
-                        </div>
-                    </div>''' % (str(p_id), i['nickname'], str(get_player_inv(i['nickname'])['health']), str(get_player_inv(i['nickname'])['mana']), i['group'], i['nickname'], i['ip'], str(p_id), str(get_player_inv(i['nickname'])['inv']))
+                p_list += dedent('''
+                                 <div class="panel panel-default">
+                                     <div class="panel-heading" data-toggle="collapse" data-parent="#pinv" data-target="#%s">
+                                         <h4 class="panel-title">
+                                             <div class="row">
+                                                 <div class="col-md-6 text-center">
+                                                     <img  src="Char Renders/%s.png">
+                                                 </div>
+                                                 <div class="col-md-6">
+                                                     <p class="text-warning"><span class="text-danger glyphicon glyphicon-heart"></span> %s <span class="text-primary glyphicon glyphicon-star"></span> %s <i class="text-info fa fa-users"></i> %s</p>
+                                                     <p class="text-warning"><span class="text-success glyphicon glyphicon-user"></span> %s <span class="text-success glyphicon glyphicon-globe"></span> %s</p>
+                                                 </div>
+                                             </div>
+                                         </h4>
+                                     </div>
+                                     <div id="%s" class="panel-collapse collapse">
+                                         <div class="panel-body">
+                                             <table class="table table-bordered"><tr>%s</tr></table>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 ''') % (str(p_id), i['nickname'], str(get_player_inv(i['nickname'])['health']), str(get_player_inv(i['nickname'])['mana']), i['group'], i['nickname'], i['ip'], str(p_id), str(get_player_inv(i['nickname'])['inv']))
                 p_id += 1
         player = p_list
     except:

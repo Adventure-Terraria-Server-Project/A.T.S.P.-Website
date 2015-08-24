@@ -50,6 +50,7 @@ You need some work and dependencies to make it run.
 
 ## Features
 ### Main Page
+* Fully mobile compatible - can be switched via "Show desktop version" (*UserAgent dependant*)
 * Thumbnail-Slider powered by bootstrap
  * Just throw in your full images in static/img/slider/full and the thumbnails are created automagically
 * Shows the amount of players currently online

@@ -15,10 +15,6 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from conf import tshock_db
 from datetime import timedelta
-from multiprocessing import Event
-from multiprocessing import JoinableQueue
-from multiprocessing import Process
-from multiprocessing import Queue
 from time import time
 
 db_host = tshock_db.ip
@@ -81,11 +77,15 @@ def get_user_by_name(username):
 def server_stats():
     conn, cur = db_con()
     totaluser = []
+    totalnewadmin = []
+    totaladmin = []
     cur.execute("SELECT * FROM `Utils_ServerStatistics`")
     for r in cur.fetchall():
         totaluser.append([r[0] * 1000, r[1]])
+        totalnewadmin.append([r[0] * 1000, r[2]])
+        totaladmin.append([r[0] * 1000, r[3]])
     db_close(conn, cur)
-    return totaluser
+    return (totaluser, totalnewadmin, totaladmin)
 
 
 ###############################################################################
@@ -213,45 +213,6 @@ def get_reports():
         if r[5] != 2:
             reports += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], userID[1], reportedID[1], r[3])
     return reports
-
-
-###############################################################################
-#                                                                             #
-'''Votes'''                                                                   #
-#                                                                             #
-###############################################################################
-
-
-def vote(user):
-    conn, cur = db_con()
-    cur.execute('SELECT `points` FROM `votes` WHERE `user` = %s', (user))
-    user_vote = cur.fetchone()
-    if user_vote:
-        cur.execute('UPDATE `votes` SET points = points + 1, totalpoints = totalpoints + 1, time = UNIX_TIMESTAMP() WHERE `user` = %s', (user))
-    else:
-        cur.execute('INSERT INTO `votes` (`time`, `user`, `totalpoints`, `points`) VALUES (UNIX_TIMESTAMP(), %s, 1, 1)', (user))
-    conn.commit()
-    db_close(conn, cur)
-
-
-def get_votes():
-    conn, cur = db_con()
-    cur.execute('SELECT `user`, `totalpoints` FROM `votes` ORDER BY `totalpoints` DESC')
-    nicks = ''
-    for r in cur.fetchall():
-        nicks += '<dt>%s</dt><dd>%s</dd>' % (r[1], r[0])
-    return nicks
-
-
-def get_points(user):
-    conn, cur = db_con()
-    cur.execute('SELECT `points` FROM `votes` WHERE `user` = %s', (user))
-    points = cur.fetchone()
-    if points:
-        points = points[0]
-    else:
-        points = None
-    return points
 
 
 ###############################################################################

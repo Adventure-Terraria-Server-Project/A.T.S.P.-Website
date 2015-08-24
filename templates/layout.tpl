@@ -37,7 +37,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             {% if user_data['user'][0] == 'Login' %}<li class="active"><a data-toggle="modal" href="#loginModal"><span class="text-danger glyphicon glyphicon-user"></span> Login</a></li>
                             {% else %}<li class="dropdown">
-                                <a data-toggle="dropdown" data-target="#" href="#"><span class="text-danger glyphicon glyphicon-user fa-lg"></span> {{user_data['user'][0]}}{% if user_data['vote'] %} <sup><span class="badge">{{user_data['vote']}}</span></sup>{% endif %} <span class="caret"></span></a>
+                                <a data-toggle="dropdown" data-target="#" href="#"><span class="text-danger glyphicon glyphicon-user fa-lg"></span> {{user_data['user'][0]}} <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/dash"><i class="fa fa-list-alt"></i> Dash</a></li>
                                     {% if user_data['staff'] %}<li><a href="/logs"><span class="glyphicon glyphicon-align-left"></span> Logs</a></li>
@@ -47,11 +47,10 @@
                                     <li><a href="/invpars"><span class="glyphicon glyphicon-th"></span> Inventory Parser</a></li>
                                     <li><a href="/searchuser"><span class="glyphicon glyphicon-search"></span> Search User</a></li>
                                     {% elif user_data['user'][1] == 'vip++' %}<li><a href="/world-map-vip"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>
-                                    {% elif user_data['user'][1] == 'supervip' or 'vip.' in user_data['user'][1] %}<li><a href="/world-map"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>{% endif %}
+                                    {% elif user_data['user'][1] == 'supervip' %}<li><a href="/world-map"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>{% endif %}
                                     <li><a href="/motd-rules"><span class="glyphicon glyphicon-edit"></span> /motd &amp; /rules</a></li>
                                     <li><a href="/shorturl"><span class="glyphicon glyphicon-link"></span> URL Shortener</a></li>
                                     <li><a href="/embed"><span class="glyphicon glyphicon-picture"></span> Avatar &#38; Signature</a></li>
-                                    <li><a href="/votes"><span class="glyphicon glyphicon-signal"></span> Votes Ranking</a></li>
                                     <li><a href="/oldworlds"><span class="glyphicon glyphicon-download"></span> Old Worlds</a></li>
                                     <li><a href="#needhelp" data-toggle="modal"><span class="glyphicon glyphicon-question-sign fa-spin"></span> Need Help</a>
                                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -195,8 +194,10 @@
         <script src="jquery.min.js"></script>
         <script src="bootstrap.min.js"></script>
         <script src="custom.js"></script>
-        {% if stats_server %}
+        {% if stats_server or backups %}
         <script src="highstock.js"></script>
+        {% endif %}
+        {% if stats_server %}
         <script type="text/javascript"><!--
             $(function () {
                 $('#stats_server').highcharts({
@@ -233,11 +234,17 @@
                         buttonTheme: { style: { width: '120px' }},
                     },
                     xAxis: { type: 'datetime', range: 1 * 24 * 3600 * 1000 },
-                    yAxis: { // Regular Users Axis
+                    yAxis: [{ // Regular Users Axis
                         title: { text: 'Peak Online Users' },
                         allowDecimals: false,
                         min: 0,
                     },
+                    { // Staff Axis
+                            title: { text: 'Staff Users' },
+                            allowDecimals: false,
+                            min: 0,
+                            opposite: true,
+                        }],
                     legend: {
                         enabled: false
                     },
@@ -246,7 +253,7 @@
                         color: '#00ff18',
                         lineWidth: 1,
                         marker: { symbol: "circle", radius: 3 },
-                        data: {{stats_server}},
+                        data: {{stats_server[0]}},
                         fillColor : {
                             linearGradient : {
                                 x1: 0,
@@ -256,6 +263,46 @@
                             },
                             stops : [
                                 [0, '#b3ffba'],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    },
+                    {
+                        name: 'Moderators',
+                        color: '#dc6e28',
+                        lineWidth: 1,
+                        yAxis: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{stats_server[1]}},
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, '#ff8635'],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    },
+                    {
+                        name: 'Administrators',
+                        color: '#c85050',
+                        lineWidth: 1,
+                        yAxis: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{stats_server[2]}},
+                        fillColor : {
+                            linearGradient : {
+                                 x1: 0,
+                                 y1: 0,
+                                 x2: 0,
+                                 y2: 1
+                            },
+                            stops : [
+                                [0, '#ff6767'],
                                 [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
                             ]
                         }

@@ -25,17 +25,14 @@ from db2_funcs import shorturl_save
 from db_funcs import banlist
 from db_funcs import dash_banned
 from db_funcs import get_player_inv
-from db_funcs import get_points
 from db_funcs import get_reports
 from db_funcs import get_user
 from db_funcs import get_user_by_name
-from db_funcs import get_votes
 from db_funcs import item_bans
 from db_funcs import lgroups
 from db_funcs import msg
 from db_funcs import search_user
 from db_funcs import server_stats
-from db_funcs import vote
 from flask import Flask
 from flask import escape
 from flask import flash
@@ -115,10 +112,7 @@ def get_data(page):
     referrer = request.referrer or 'No Referrer'
     recents = save_visit({'user': user, 'page': page, 'ip': ip, 'referrer': referrer, 'ua': ua, 'mobile': mobile_user})
 
-    # Vote Points
-    vpoints = get_points(user)
-
-    return {'user': user_id_grp, 'staff': user_staff, 'mobile': mobile_user, 'vote': vpoints, 'recents': recents}
+    return {'user': user_id_grp, 'staff': user_staff, 'mobile': mobile_user, 'recents': recents}
 
 
 ###############################################################################
@@ -144,15 +138,12 @@ def index():
     if request.method == 'POST':
         user = User.get_by_username(request.form['username'])
         password = request.form['password'].encode('utf-8')
-        try:
-            hashed = user.password.encode('utf-8')
-            if user and bcrypt.hashpw(password, hashed) == hashed:
-                login_user(user, remember=True)
-                flash('You were successfully logged in')
-                return redirect(url_for('dash', _scheme='https', _external='True'))
-            else:
-                flash(conf.wrong_login)
-        except AttributeError:
+        hashed = user.password.encode('utf-8')
+        if user and bcrypt.hashpw(password, hashed) == hashed:
+            login_user(user, remember=True)
+            flash('You were successfully logged in')
+            return redirect(url_for('dash', _scheme='https', _external='True'))
+        else:
             flash(conf.wrong_login)
 
     return render_template('main.tpl', user_data=user_data, name=name, p_count=player['p_count'], p_list=player['p_list'], groups=groups, slider=slider)
@@ -398,25 +389,6 @@ def save_url():
 
 ###############################################################################
 #                                                                             #
-'''Ranking of most Votes'''                                                   #
-#                                                                             #
-###############################################################################
-
-
-@app.route('/votes')
-def votes():
-    name = '%s Ranking of Votes' % conf.short_name
-
-    # Get User-Info and Recent Online Users
-    user_data = get_data('votes')
-
-    rank = get_votes()
-
-    return render_template('voterank.tpl', user_data=user_data, name=name, rank=rank)
-
-
-###############################################################################
-#                                                                             #
 '''Old Worlds'''                                                              #
 #                                                                             #
 ###############################################################################
@@ -477,36 +449,6 @@ def donate_fundrazr():
 
 ###############################################################################
 #                                                                             #
-'''Vote Terraria Servers'''                                                   #
-#                                                                             #
-###############################################################################
-
-
-@app.route('/vote_terrariaservers')
-def vote_terrariaservers():
-    # Get User-Info and Recent Online Users
-    user_data = get_data('terrariaservers')
-
-    return redirect('http://terraria-servers.com/server/7/vote/')
-
-
-###############################################################################
-#                                                                             #
-'''Vote TServerWeb'''                                                         #
-#                                                                             #
-###############################################################################
-
-
-@app.route('/vote_tserverweb')
-def vote_tserverweb():
-    # Get User-Info and Recent Online Users
-    user_data = get_data('tserverweb')
-
-    return redirect('http://www.tserverweb.com/terraria-server/285/like/')
-
-
-###############################################################################
-#                                                                             #
 '''World Map'''                                                               #
 #                                                                             #
 ###############################################################################
@@ -518,7 +460,7 @@ def show_world():
     # Get User-Info and Recent Online Users
     user_data = get_data('world')
 
-    if user_data['user'][1] == 'supervip' or 'vip.' in user_data['user'][1] or user_data['staff']:
+    if user_data['user'][1] == 'supervip' or user_data['staff']:
         return send_from_directory('/home/atsp/mainserver/map/', 'world-now.png')
     else:
         return redirect(url_for('not_found', _scheme='https', _external='True'))

@@ -7,7 +7,7 @@ debug = True
 cookie_duration = 14
 name = 'Adventure Terraria Server Project :: 24/7 :: ServerSideCharacter'
 # Prefix of all other sites
-short_name = 'A.T.S.P ::'
+short_name = 'A.T.S.P. ::'
 secret_key = 'YorpDood'  # create with os.random()
 wrong_login = '<strong>Oh Snap!</strong> Invalid credentials'
 
