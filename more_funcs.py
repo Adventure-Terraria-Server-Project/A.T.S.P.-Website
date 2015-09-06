@@ -209,9 +209,9 @@ def online_invpars():
 def parsevar(line, kword):
     msg_kwords = ("hax", "hack", "glitch", "bug", "ban", "kick", "kik", "admin", "staff", "mod", "invedit", "cheat", "dupe", "grief", "player edit", "inventory edit", "invis", "noclip", "invhealth", "client", "suspi", "spawn", "one hit", "terion", "yama", "tony", "steal", "santa", "stark", "slash", "crust", "alej", "eagle", "joffrey", "detect", "figure", "check", "notice")
     if any(word in line.lower() for word in msg_kwords):
-        return '<strong><font style="color: red">' + line.replace('<', '&#60').replace('>', '&#62') + '</font></strong><br>'
+        return '<strong><font style="color: red">' + line.replace('<', '&#60;').replace('>', '&#62;') + '</font></strong><br>'
     else:
-        return line.replace('<', '&#60').replace('>', '&#62') + '<br>'
+        return line.replace('<', '&#60;').replace('>', '&#62;') + '<br>'
 
 
 def parselogs():
@@ -220,7 +220,7 @@ def parselogs():
     if os.path.getsize(serverlog) < 3000000:
         with open(serverlog, 'r') as sl:
             slog = open(serverlog)
-            log['slog'] += slog.read().replace('<', '&#60').replace('>', '&#62').replace('\n', '<br>')
+            log['slog'] += slog.read().replace('<', '&#60;').replace('>', '&#62;').replace('\n', '<br>')
     else:
         log['slog'] = '<h1 class="text-danger">Logfile too big!</h1>'
     logdir = conf.logdir

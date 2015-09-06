@@ -1,8 +1,8 @@
-            {% extends "layout.tpl" %}
+{% extends 'layout.tpl' %}
             {% block content %}
             <div class="row content">
                 <div class="col-md-12">
-                    <h2 class="text-success text-center">{{name}}</h2>
+                    <h2 class="text-success text-center">{{ name }}</h2>
                 </div>
                 <div class="row">
                     <div style="position: fixed">
@@ -33,15 +33,16 @@
                     </div>
                     <div class="col-md-10">
                         <div class="tab-content">
-                            <div class="tab-pane fade in active" id="tshock">{{logs['tshock']}}</div>
-                            <div class="tab-pane fade" id="utils">{{logs['utils']}}</div>
-                            <div class="tab-pane fade" id="imanager">{{logs['imanager']}}</div>
-                            <div class="tab-pane fade" id="ptrace">{{logs['ptrace']}}</div>
-                            <div class="tab-pane fade" id="log">{{logs['log']}}</div>
-                            <div class="tab-pane fade" id="commands">{{logs['commands']}}</div>
-                            <div class="tab-pane fade" id="slog">{{logs['slog']}}</div>
+                            <div class="tab-pane fade in active" id="tshock">{{ logs['tshock'] }}</div>
+                            <div class="tab-pane fade" id="utils">{{ logs['utils'] }}</div>
+                            <div class="tab-pane fade" id="imanager">{{ logs['imanager'] }}</div>
+                            <div class="tab-pane fade" id="ptrace">{{ logs['ptrace'] }}</div>
+                            <div class="tab-pane fade" id="log">{{ logs['log'] }}</div>
+                            <div class="tab-pane fade" id="commands">{{ logs['commands'] }}</div>
+                            <div class="tab-pane fade" id="slog">{{ logs['slog'] }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br>{% endblock %}
+            <br>
+            {%- endblock %}

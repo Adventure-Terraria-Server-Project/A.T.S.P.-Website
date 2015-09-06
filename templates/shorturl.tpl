@@ -1,17 +1,18 @@
-            {% extends "layout.tpl" %}
+{% extends 'layout.tpl' %}
             {% block content %}
             <div class="row content">
                 <div class="col-md-12">
-                    <h2 class="text-success text-center">{{name}}</h2>
+                    <h2 class="text-success text-center">{{ name }}</h2>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="text-center alert alert-warning">Use <strong>www.s.yamahi.eu</strong> to access short URLs</div>
                         <dl class="dl-horizontal">
-                        {{url_config}}
+                            {{ url_config }}
                         </dl>
                     </div>
-                </div>{% if staff %}
+                </div>
+                {%- if staff %}
                 <div class="row">
                     <div class="col-md-12">
                         <form role="form" method="POST" action="/shorturl">
@@ -31,4 +32,7 @@
                         </form>
                     </div>
                 </div>
-            </div>{% endif %}<br>{% endblock %}
+            </div>
+            {%- endif %}
+            <br>
+            {%- endblock %}

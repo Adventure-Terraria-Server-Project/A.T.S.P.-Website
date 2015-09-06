@@ -273,7 +273,7 @@ def inv_pars(inventorystring):
             items.update({row[0]: {'name': row[1]}})
 
     with open('prefixes.tsv') as prefixfile:
-        prefixreader = csv.reader(prefixfile, delimiter='\t', quotechar='"')
+        prefixreader = csv.reader(prefixfile, delimiter=',', quotechar='"')
         for row in prefixreader:
             prefixes.update({row[0]: {'name': row[1]}})
 
@@ -300,7 +300,7 @@ def inv_pars(inventorystring):
                 count_row += 1
 
         if itemid in items.keys():
-            inv += '<td><img title="%s%s" src="items/Item_%s.png"><span class="badge">%s</span></td>' % (prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount)
+            inv += '<td><img title="%s %s" src="items/Item_%s.png"><span class="badge">%s</span></td>' % (prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount)
         else:
             inv += '<td></td>'
         count_inv += 1

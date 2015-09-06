@@ -1,11 +1,13 @@
-            {% extends "layout.tpl" %}{% block content %}<div class="row content">
-                {% if not user_data['mobile'] %}<div class="col-md-12 text-center">
+{% extends 'layout.tpl' %}
+            {% block content %}
+            <div class="row content">
+                {%- if not user_data['mobile'] %}<div class="col-md-12 text-center">
                     <div class="jumbotron">
                         <h1 class="banner">Adventure Terraria Server Project</h1>
                         <div id="carousel" class="carousel slide" data-ride="carousel">
                             <!-- Indicators -->
                             <ol class="carousel-indicators">
-{{slider}}
+                                {{ slider }}
                             </div>
                             <!-- Controls -->
                             <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
@@ -15,17 +17,21 @@
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                             </a>
                         </div>
-                        <br>{% if p_count %}
+                        <br>
+                        {%- if p_count %}
                         <div class="row render">
-                            <p style="font-size: 14px">{{p_list}}</p>
+                            <p style="font-size: 14px">{{ p_list }}</p>
                         </div>
                         <div class="row">
-                            <span class="label label-warning">Online Players {{p_count['playercount']}}</span>
-                        </div>{% else %}
+                            <span class="label label-warning">Online Players {{ p_count['playercount'] }}</span>
+                        </div>
+                        {%- else %}
                         <div class="row">
                             <p>Server currently offline.</p>
                             <p>Please stay tuned!</p>
-                        </div>{% endif %}<br>
+                        </div>
+                        {%- endif %}
+                        <br>
                         <div class="row">
                             <div class="btn-group">
                                 <a href="#needhelp" data-toggle="modal" class="btn btn-danger">Need Help <span class="glyphicon glyphicon-question-sign"></span></a>
@@ -47,11 +53,12 @@
                             </div>
                         </div>
                     </div>
-                </div>{% else %}
+                </div>
+                {%- else %}
                 <div class="col-md-12 text-center">
                     <div>
                         <h4 class="text-primary">Adventure Terraria Server Project</h4>
-                        <h6 class="label label-info">Online Players {{p_count['playercount']}}</h6>
+                        <h6 class="label label-info">Online Players {{ p_count['playercount'] }}</h6>
                     </div><br>
                     <div class="row">
                         <div class="row">
@@ -71,10 +78,12 @@
                             </div>
                         </div>
                     </div>
-                </div>{% endif %}
+                </div>
+                {%- endif %}
                 <div class="row">
                     <div class="col-md-6">
-                        {% if not user_data['mobile'] %}<div class="panel-group" id="accordion">
+                        {%- if not user_data['mobile'] %}
+                        <div class="panel-group" id="accordion">
                             <div class="panel panel-warning">
                                 <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
                                     <h4 class="panel-title"><span class="glyphicon glyphicon-question-sign fa-spin"></span> Need Help?</h4>
@@ -113,9 +122,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>{% endif %}
+                        </div>
+                        {%- endif %}
                         <br>
-                        {% if user_data['mobile'] %}<div id="hardmodetime">
+                        {%- if user_data['mobile'] %}
+                        <div id="hardmodetime">
                             <h4>Time Left Until Hardmode is Available</h4>
                             <div class="hardmode hidden-xs progress">
                                 <div id="hardmodeBar" class="progress-bar progress-bar-danger" role="progressbar"></div>
@@ -126,7 +137,9 @@
                                 <div id="worldResetBar" class="progress-bar progress-bar-info" role="progressbar"></div>
                             </div>
                             <span class="label label-info" id="worldResetText" title="Fresh world every Sunday after 6 PM UTC"></span>
-                        </div><br>{% endif %}
+                        </div>
+                        <br>
+                        {%- endif %}
                         <table class="table table-hover table-bordered table-striped jshide">
                             <tr>
                                 <th style="color: red"><u>Server details</u></th>
@@ -162,7 +175,7 @@
                                 <div id="collapseOnegroup" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <table class="table-condensed">
-                                            <tr>{{groups['vips']}}</tr>
+                                            <tr>{{ groups['vips'] }}</tr>
                                         </table>
                                     </div>
                                 </div>
@@ -176,7 +189,7 @@
                                 <div id="collapseTwogroup" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <table class="table-condensed">
-                                            <tr>{{groups['newadmins']}}</tr>
+                                            <tr>{{ groups['newadmins'] }}</tr>
                                         </table>
                                     </div>
                                 </div>
@@ -190,7 +203,7 @@
                                 <div id="collapseThreegroup" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <table class="table-condensed">
-                                            <tr>{{groups['admins']}}</tr>
+                                            <tr>{{ groups['admins'] }}</tr>
                                         </table>
                                     </div>
                                 </div>
@@ -204,7 +217,7 @@
                                 <div id="collapseFourgroup" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <table class="table-condensed">
-                                            <tr>{{groups['superadmins']}}</tr>
+                                            <tr>{{ groups['superadmins'] }}</tr>
                                         </table>
                                     </div>
                                 </div>
@@ -213,7 +226,8 @@
                         <br>
                     </div>
                     <div class="col-md-6">
-                        {% if not user_data['mobile'] %}<div id="hardmodetime">
+                        {%- if not user_data['mobile'] %}
+                        <div id="hardmodetime">
                             <h4>Time Left Until Hardmode is Available</h4>
                             <div class="hardmode progress progress-striped active">
                                 <div id="hardmodeBar" class="progress-bar progress-bar-danger" role="progressbar"></div>
@@ -224,7 +238,9 @@
                                 <div id="worldResetBar" class="progress-bar progress-bar-info" role="progressbar"></div>
                             </div>
                             <span class="label label-info" id="worldResetText" title="Fresh world every Sunday after 6 PM UTC"></span>
-                        </div><br>{% endif %}
+                        </div>
+                        <br>
+                        {%- endif %}
                         <dl>
                             <dt>Adventure - Art - Community</dt>
                             <dd>A.T.S.P. is excited to present THE Terraria adventure server! Explore our worlds while stockpiling gear, make yourself a home to show off your hard work and finally, experience hardmode on the weekend to put your effort to the test. If this does not satisfy your adventuring desires, explore our mazes, beat our custom dungeons and make further use of our gameplay-extending features such as advanced wiring, custom statues and many more!</dd>
@@ -238,4 +254,6 @@
                         <strong>Give it a try, join us and have some fun!</strong>
                     </div>
                 </div>
-            </div><br>{% endblock %}
+            </div>
+            <br>
+            {%- endblock %}

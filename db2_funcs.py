@@ -97,12 +97,11 @@ def shorturl_read():
 ###############################################################################
 
 
-def get_old_worlds():
+def get_old_worlds(item):
     conn, cur = db_con()
-    cur.execute("SELECT * FROM `oldworlds` ORDER BY `date` DESC")
-    worlds = ''
-    for r in cur.fetchall():
-        worlds += '<tr><td>%s</td><td>%s</td><td><a class="btn btn-primary" href="static/files/world/%s">Download <span class="glyphicon glyphicon-download-alt"></span></a></td></tr>' % (r[0], r[1], r[1])
+    sql = 'SELECT * FROM `oldworlds` ORDER BY `date` DESC LIMIT {0}, {1}'.format(item, 20)
+    cur.execute(sql)
+    worlds = cur.fetchall()
 
     db_close(conn, cur)
     return worlds

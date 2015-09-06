@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{name}}</title>
+        <title>{{ name }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="description" content="This is our adventure Terraria Server with weekly world cycles, free build, free to explore and meaningful plugins!">
         <link rel="shortcut icon" href="favicon.ico">
         <!-- CSS -->
         <link rel="stylesheet" href="bootstrap.min.css">
-        {% if not user_data['mobile'] %}<link rel="stylesheet" href="bootstrap-theme.min.css">{% endif %}
-        <link rel="stylesheet" href="custom.css">
+        {%- if not user_data['mobile'] %}
+        <link rel="stylesheet" href="bootstrap-theme.min.css">
+        {%- endif %}
         <link rel="stylesheet" href="font-awesome.min.css">
+        <link rel="stylesheet" href="custom.css">
     </head>
     <body>
         <div class="container">
-            {% if not user_data['mobile'] %}<nav class="navbar navbar-default navbar-fixed-top" role="navigation">{% else %}<nav class="navbar navbar-default navbar-static-top" role="navigation">{% endif %}
+            {%- if not user_data['mobile'] %}
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            {%- else %}
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            {%- endif %}
                 <div class="container">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -35,19 +41,25 @@
                             <li><a target="_blank" href="https://youtube.com/user/theflame90"><i class="text-primary fa fa-youtube fa-fw fa-lg"></i> Channel</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            {% if user_data['user'][0] == 'Login' %}<li class="active"><a data-toggle="modal" href="#loginModal"><span class="text-danger glyphicon glyphicon-user"></span> Login</a></li>
-                            {% else %}<li class="dropdown">
-                                <a data-toggle="dropdown" data-target="#" href="#"><span class="text-danger glyphicon glyphicon-user fa-lg"></span> {{user_data['user'][0]}} <span class="caret"></span></a>
+                            {%- if user_data['user'][0] == 'Login' %}
+                            <li class="active"><a data-toggle="modal" href="#loginModal"><span class="text-danger glyphicon glyphicon-user"></span> Login</a></li>
+                            {%- else %}
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" data-target="#" href="#"><span class="text-danger glyphicon glyphicon-user fa-lg"></span> {{ user_data['user'][0] }} <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/dash"><i class="fa fa-list-alt"></i> Dash</a></li>
-                                    {% if user_data['staff'] %}<li><a href="/logs"><span class="glyphicon glyphicon-align-left"></span> Logs</a></li>
+                                    {%- if user_data['staff'] %}
+                                    <li><a href="/logs"><span class="glyphicon glyphicon-align-left"></span> Logs</a></li>
                                     <li><a href="/irclogs"><span class="glyphicon glyphicon-align-left"></span> IRC Logs</a></li>
                                     <li><a href="/bans"><span class="glyphicon glyphicon-list"></span> Ban List</a></li>
                                     <li><a href="/world-map"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>
                                     <li><a href="/invpars"><span class="glyphicon glyphicon-th"></span> Inventory Parser</a></li>
                                     <li><a href="/searchuser"><span class="glyphicon glyphicon-search"></span> Search User</a></li>
-                                    {% elif user_data['user'][1] == 'vip++' %}<li><a href="/world-map-vip"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>
-                                    {% elif user_data['user'][1] == 'supervip' %}<li><a href="/world-map"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>{% endif %}
+                                    {%- elif user_data['user'][1] == 'vip++' %}
+                                    <li><a href="/world-map-vip"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>
+                                    {%- elif user_data['user'][1] == 'supervip' %}
+                                    <li><a href="/world-map"><span class="glyphicon glyphicon-picture"></span> World Map</a></li>
+                                    {%- endif %}
                                     <li><a href="/motd-rules"><span class="glyphicon glyphicon-edit"></span> /motd &amp; /rules</a></li>
                                     <li><a href="/shorturl"><span class="glyphicon glyphicon-link"></span> URL Shortener</a></li>
                                     <li><a href="/embed"><span class="glyphicon glyphicon-picture"></span> Avatar &#38; Signature</a></li>
@@ -55,12 +67,14 @@
                                     <li><a href="#needhelp" data-toggle="modal"><span class="glyphicon glyphicon-question-sign fa-spin"></span> Need Help</a>
                                     <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                                 </ul>
-                            </li>{% endif %}
+                            </li>
+                            {%- endif %}
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div>
             </nav>
-            {% if user_data['user'][0] == 'Login' %}<!-- Login Modal -->
+            {%- if user_data['user'][0] == 'Login' %}
+            <!-- Login Modal -->
             <div class="modal fade" id="loginModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -94,8 +108,10 @@
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->{% endif %}
-            {# {% if not user_data['mobile'] %}<!-- News Modal - Cookie based -->
+            </div><!-- /.modal -->
+            {%- endif %}
+            {#- {%- if not user_data['mobile'] %}
+            <!-- News Modal - Cookie based -->
             <div class="modal fade" id="mainModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -115,7 +131,8 @@
                         </div>
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->{% endif %} #}
+            </div><!-- /.modal -->
+            {%- endif %} #}
             <!-- Need Help? Modal -->
             <div class="modal fade" id="needhelp">
                 <div class="modal-dialog">
@@ -148,17 +165,20 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
-            {% with msgs = get_flashed_messages() %}
-                {% if msgs %}
+            {%- with msgs = get_flashed_messages() %}
+                {%- if msgs %}
                     {%- for msg in msgs %}
-                        <div class="alert alert-success alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <span class="glyphicon glyphicon-info-sign"></span> {{ msg }}
-                        </div>
-                    {% endfor -%}
-                {% endif %}
-            {% endwith %}{% block content %}{% endblock %}
-            {% if not user_data['mobile'] %}<div class="row well">
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <span class="glyphicon glyphicon-info-sign"></span> {{ msg }}
+            </div>
+                    {%- endfor -%}
+                {%- endif %}
+            {%- endwith %}
+            {%- block content %}
+            {% endblock %}
+            {%- if not user_data['mobile'] %}
+            <div class="row well">
                 <div class="col-md-12">
                     <footer>
                         <div class="col-md-4">
@@ -187,17 +207,49 @@
                         </div>
                     </footer>
                 </div>
-            </div>{% endif %}
-            <div id="bottombar">Recently Online: {{user_data['recents']}}</div>
+            </div>
+            <div id="bottombar">Recently Online: {{ user_data['recents'] }}</div>
+            {%- endif %}
         </div>
         <!-- JavaScript -->
         <script src="jquery.min.js"></script>
         <script src="bootstrap.min.js"></script>
         <script src="custom.js"></script>
-        {% if stats_server or backups %}
+        {%- if request.path == '/oldworlds' %}
+        <script type="text/javascript">
+            var html_size = document.body.clientHeight;   // HTML content size
+            var view = $(window).height();                // Window height
+            var item = 0;
+            function load() {
+                next_url = "/get_worlds/" + item;
+                $.ajax({
+                    url: next_url,
+                    cache: false,
+                    async: false,
+                    success: function( html ) {
+                        $( "tbody.infinite-scroll" ).append( html );
+                        item += 20;
+                    }
+                });
+            };
+            do {
+                load();
+                html_size = document.body.clientHeight;
+            }
+            while ( html_size <= view );
+            $(window).scroll(function() {
+                html_size = document.body.clientHeight;
+                view = $( window ).height();
+                if($(this).scrollTop() >= (html_size - view)*0.90 ) {
+                    load();
+                }
+            });
+        </script>
+        {%- endif %}
+        {%- if stats_server or backups %}
         <script src="highstock.js"></script>
-        {% endif %}
-        {% if stats_server %}
+        {%- endif %}
+        {%- if stats_server %}
         <script type="text/javascript"><!--
             $(function () {
                 $('#stats_server').highcharts({
@@ -309,8 +361,9 @@
                     }]
                 });
             });
-        --></script>{% endif %}
-        {% if web_stats %}
+        --></script>
+        {%- endif %}
+        {%- if web_stats %}
         <script type="text/javascript"><!--
             $(function () {
                 $('#stats_user').highcharts({
@@ -479,7 +532,7 @@
                 });
             });
         --></script>
-                <script type="text/javascript"><!--
+        <script type="text/javascript"><!--
             $(function () {
                 $('#stats_pages').highcharts({
                     chart: { type: 'area'},
@@ -608,8 +661,9 @@
                     }{% endif %}]
                 });
             });
-        --></script>{% endif %}
-        {% if backups %}
+        --></script>
+        {%- endif %}
+        {%- if backups %}
         <script type="text/javascript"><!--
             $(function () {
                 $('#backups').highcharts({
@@ -752,6 +806,7 @@
                     ]
                 });
             });
-        --></script>{% endif %}
+        --></script>
+        {%- endif %}
     </body>
 </html>

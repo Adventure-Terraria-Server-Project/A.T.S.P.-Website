@@ -165,7 +165,7 @@ def dash():
     user_data = get_data('dash')
 
     stats_server = server_stats()
-    web_stats = get_visit()
+    #web_stats = get_visit()
 
     b_items = item_bans()
     reports = get_reports()
@@ -174,7 +174,7 @@ def dash():
     nickban, ipban = dash_banned(user_data['user'][0], request.headers.get('X-Forward-For'))
     msgs, count = msg(user_data['user'][0])
 
-    return render_template('dash.tpl', user_data=user_data, name=name, stats_server=stats_server, b_items=b_items, nickban=nickban, ipban=ipban, msgs=msgs, count=count, backups=backups, reports=reports, web_stats=web_stats)
+    return render_template('dash.tpl', user_data=user_data, name=name, stats_server=stats_server, b_items=b_items, nickban=nickban, ipban=ipban, msgs=msgs, count=count, backups=backups, reports=reports) #, web_stats=web_stats)
 
 
 ###############################################################################
@@ -401,9 +401,13 @@ def oldworlds():
     # Get User-Info and Recent Online Users
     user_data = get_data('oldworlds')
 
-    worlds = get_old_worlds()
+    return render_template('oldworlds.tpl', user_data=user_data, name=name)
 
-    return render_template('oldworlds.tpl', user_data=user_data, name=name, worlds=worlds)
+
+@app.route('/get_worlds/<int:item>')
+def getworlds(item):
+    worlds = get_old_worlds(item)
+    return render_template('oldworlds_item.tpl', worlds=worlds)
 
 
 ###############################################################################

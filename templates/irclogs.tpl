@@ -1,8 +1,8 @@
-            {% extends "layout.tpl" %}
+{% extends 'layout.tpl' %}
             {% block content %}
             <div class="row content">
                 <div class="col-md-12">
-                    <h2 class="text-success text-center">{{name}}</h2>
+                    <h2 class="text-success text-center">{{ name }}</h2>
                 </div>
                 <div class="row">
                     <div style="position: fixed">
@@ -26,12 +26,13 @@
                     </div>
                     <div class="col-md-9">
                         <div class="tab-content">
-                            <div class="tab-pane fade in active" id="t">{{logs[3]}}</div>
-                            <div class="tab-pane fade" id="yd">{{logs[2]}}</div>
-                            <div class="tab-pane fade" id="tda">{{logs[1]}}</div>
-                            <div class="tab-pane fade" id="query">{{logs[0]}}</div>
+                            <div class="tab-pane fade in active" id="t">{{ logs[3] }}</div>
+                            <div class="tab-pane fade" id="yd">{{ logs[2] }}</div>
+                            <div class="tab-pane fade" id="tda">{{ logs[1] }}</div>
+                            <div class="tab-pane fade" id="query">{{ logs[0] }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <br>{% endblock %}
+            <br>
+            {%- endblock %}

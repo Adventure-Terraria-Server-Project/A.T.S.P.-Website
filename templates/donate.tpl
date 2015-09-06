@@ -1,8 +1,8 @@
-            {% extends "layout.tpl" %}
+{% extends 'layout.tpl' %}
             {% block content %}
             <div class="row content">
                 <div class="col-md-12 text-center">
-                    <h2 class="text-success">{{name}}</h2>
+                    <h2 class="text-success">{{ name }}</h2>
                 </div>
                 <br>
                 <div class="row text-center">
@@ -41,6 +41,9 @@
                         </div>
                     </div>
                 </div>
-                {% if user_data['staff'] %}{{donated}}{% endif %}
+                {%- if user_data['staff'] %}
+                {{donated}}
+                {%- endif %}
             </div>
-            <br>{% endblock %}
+            <br>
+            {%- endblock %}
