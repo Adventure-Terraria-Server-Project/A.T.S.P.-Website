@@ -215,36 +215,11 @@
         <script src="jquery.min.js"></script>
         <script src="bootstrap.min.js"></script>
         <script src="custom.js"></script>
+        {%- if request.path == '/' %}
+        <script src="progressbars.js"></script>
+        {%- endif %}
         {%- if request.path == '/oldworlds' %}
-        <script type="text/javascript">
-            var html_size = document.body.clientHeight;   // HTML content size
-            var view = $(window).height();                // Window height
-            var item = 0;
-            function load() {
-                next_url = "/get_worlds/" + item;
-                $.ajax({
-                    url: next_url,
-                    cache: false,
-                    async: false,
-                    success: function( html ) {
-                        $( "tbody.infinite-scroll" ).append( html );
-                        item += 20;
-                    }
-                });
-            };
-            do {
-                load();
-                html_size = document.body.clientHeight;
-            }
-            while ( html_size <= view );
-            $(window).scroll(function() {
-                html_size = document.body.clientHeight;
-                view = $( window ).height();
-                if($(this).scrollTop() >= (html_size - view)*0.90 ) {
-                    load();
-                }
-            });
-        </script>
+        <script src="scroll_load.js"></script>
         {%- endif %}
         {%- if stats_server or backups %}
         <script src="highstock.js"></script>
