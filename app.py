@@ -501,17 +501,17 @@ def show_world_crop():
 
 @app.route('/avatar/<user>')
 def create_ava(user):
-    if os.path.exists('static/img/avatars/' + user + '.png'):
-        if os.path.exists('static/img/Char Renders/' + user + '.png') and os.path.getmtime('static/img/avatars/' + user + '.png') < time() - 6000:
+    if os.path.exists('static/img/avatars/%s.png' % user):
+        if os.path.exists('static/img/Char Renders/%s.png' % user) and os.path.getmtime('static/img/avatars/%s.png' % user) < time() - 6000:
             avatar(user)
-        return send_from_directory('static/img/avatars/', user + '.png')
+        return send_from_directory('static/img/avatars/', '%s.png' % user)
     else:
         try:
             # Get active session
             user_id_grp = get_group(current_user.get_id())
             if user_data['user'][0] in [user, 'Yama']:
                 avatar(user)
-                return send_from_directory('static/img/avatars/', user + '.png')
+                return send_from_directory('static/img/avatars/', '%s.png' % user)
         except:
             pass
     return redirect(url_for('not_found', _scheme='https', _external='True'))
@@ -526,17 +526,17 @@ def create_ava(user):
 
 @app.route('/signature/<user>')
 def create_sig(user):
-    if os.path.exists('static/img/signatures/%s.png') % user:
-        if os.path.exists('static/img/Char Renders/%s.png') % user and os.path.getmtime('static/img/signatures/%s.png') % user < time() - 6000:
+    if os.path.exists('static/img/signatures/%s.png' % user):
+        if os.path.exists('static/img/Char Renders/%s.png' % user) and os.path.getmtime('static/img/signatures/%s.png' % user) < time() - 6000:
             signature(user)
-        return send_from_directory('static/img/signatures/', '%s.png') % user
+        return send_from_directory('static/img/signatures/', '%s.png' % user)
     else:
         try:
             # Get active session
             user_id_grp = get_group(current_user.get_id())
             if user_data['user'][0] in [user, 'Yama']:
                 signature(user)
-                return send_from_directory('static/img/signatures/', user + '.png')
+                return send_from_directory('static/img/signatures/', '%s.png' % user)
         except:
             pass
     return redirect(url_for('not_found', _scheme='https', _external='True'))
