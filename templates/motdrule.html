@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column main">
+                <h1 class="ui teal dividing header">
+                    <i class="edit icon"></i>
+                    <div class="content">MOTD and Rules
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                {%- if staff %}
+                <form class="ui form" role="form" method="POST" action="/motd_rules">
+                    <div class="field">
+                        <label>Rules</label>
+                        <textarea name="rules" type="text" rows="7">{%- for line in moru['rules'] %}{{ line }}{%- endfor %}</textarea>
+                    </div>
+                    <br>
+                    <div class="field">
+                        <label>MOTD</label>
+                        <textarea name="motd" type="text" rows="7">{%- for line in moru['motd'] %}{{ line }}{%- endfor %}</textarea>
+                    </div>
+                    <br>
+                    <button class="fluid ui basic button" type="submit" value="Send"><i class="floppy icon"></i>Save All</button>
+                </form>
+                {%- else %}
+                <div class="ui segment">
+                    <div class="ui red segment">
+                        <h4 class="ui header">Rules</h4>
+                        <p>
+                            {%- for line in moru['rules'] %}
+                                {{ line }}<br>
+                            {%- endfor %}
+                        </p>
+                    </div>
+                    <div class="ui teal segment">
+                        <h4 class="ui header">MOTD</h4>
+                        <p>
+                        {%- for line in moru['motd'] %}
+                            {{ line }}<br>
+                        {%- endfor %}
+                        </p>
+                    </div>
+                    {%- endif %}
+                </div>
+            </div>
+            {%- endblock %}

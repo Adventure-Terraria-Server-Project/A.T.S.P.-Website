@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{ name }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <!--<meta name="theme-color" content="#a7ff8c">-->
+        <meta name="theme-color" content="#21ba45">
+        <meta name="description" content="Adventure Terraria Server with weekly world cycle">
+        <link rel="shortcut icon" href="static/img/favicon.ico">
+
+        <!-- OGP -->
+        <meta name="twitter:card" content="summary" />
+        <meta property="og:url" content="https://dev.yamahi.eu/" />
+        <meta property="og:title" content="{{ name }}" />
+        <meta property="og:description" content="This is our adventure Terraria Server with weekly world cycles, free build, free to explore and meaningful plugins!" />
+        <meta property="og:image" content="https://dev.yamahi.eu/banner.png" />
+        <meta property="og:image:alt" content="Banner" />
+        <meta property="og:type" content="website" />
+
+        <!-- CSS -->
+        {% assets filters="cssmin", output="css/packed.css",
+          'css/semantic.min.css', 'css/site.css', 'css/index.css' %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+        {% endassets %}
+    </head>
+    <body>
+        {%- set nav_site %}
+            {%- include 'nav-site.html' %}
+        {%- endset %}
+        {%- set nav_social %}
+            {%- include 'nav-social.html' %}
+        {%- endset %}
+        {%- if request.path == '/' and not user_data['mobile'] %}
+        <!-- Navbar - Desktop scrolled-down -->
+        <div class="ui green large top fixed inverted hidden menu">
+            <div class="ui container">
+                {{ nav_social }}
+                <div class="right menu">
+                    {%- if current_user.is_active %}
+                    <a class="item" href="/dash">{{ user_data['user'][0] }}</a>
+                    {% else %}
+                    <a class="item login_button">Login</a>
+                    {%- endif %}
+                </div>
+            </div>
+        </div>
+        {%- endif %}
+        <div class="pusher">
+            <!-- Login Popup -->
+            <div class="ui modal login">
+                <div class="header">
+                    Login with ingame Name and Password
+                </div>
+                <div class="content">
+                    <form class="ui form" role="form" method="POST" action="/">
+                        <div class="field">
+                            <label for="username">Nickname</label>
+                            <input name="username" type="text" placeholder="Nickname">
+                        </div>
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <input name="password" type="password" placeholder="Password">
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="ui button primary">Login</button>
+                            <div class="ui cancel button">Cancel</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {%- if request.path == '/' %}
+            <!-- Index - Desktop - Banner -->
+            <div class="ui vertical masthead center aligned segment" style="background-image: url(static/img/screenshots/b_{{ image|random() }}) !important;">
+                {%- if not user_data['mobile'] %}
+                <!-- Navbar - Index - Desktop - Banner -->
+                <div class="ui container">
+                    <div class="ui large secondary inverted pointing menu">
+                        <a class="toc item">
+                            <i class="icon sidebar"></i>
+                        </a>
+                        {{ nav_social }}
+                        <div class="right menu">
+                            <div class="item">
+                                {%- if current_user.is_active %}
+                                <a class="ui inverted button" href="/dash">{{ user_data['user'][0] }}</a>
+                                {%- else %}
+                                <a class="ui inverted button login_button">Login</a>
+                                {%- endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%- endif %}
+                <div class="ui container">
+                    <h1 class="ui green header"><strong>{{ name }}</strong></h1>
+                    <h2>
+                        {%- if player_list != False %}
+                        <div class="row render">
+                            <p style="font-size: 14px">
+                                {%- for player in player_list %}
+                                <span data-tooltip="{{ player[0] }}" data-position="bottom center" class="render"><img title="{{ player[1] }}" alt="{{ player[1] }}" src="Char%20Renders/{{ player[1] }}.png"></span>
+                                {%- endfor %}
+                            </p>
+                        </div>
+                        <div class="ui big label">
+                            <i class="icon users blue"></i>{{ player_list|length }} Online Players
+                        </div>
+                        {%- else %}
+                        <div class="row">
+                            <p>Server currently offline.</p>
+                            <p>Please stay tuned!</p>
+                        </div>
+                    {%- endif %}
+                    </h2>
+                    <div class="ui buttons">
+                        <a class="ui huge blue button" href="steam://rungameid/105600//%20-j%20yamahi.eu%20-p%207878"><i class="icon rocket"></i>Join Now</a>
+                        <a class="ui huge red button" target="_blank" href="http://s.yamahi.eu/vip"><i class="icon gift"></i>Donate to support us</a>
+                    </div>
+                </div>
+            </div>
+            {%- endif %}
+            <!-- Main content -->
+            <div class="ui container main">
+                <div class="ui vertical stripe segment">
+                    <!-- Messages -->
+                    {%- with msgs = get_flashed_messages() %}
+                        {%- if msgs %}
+                            {%- for msg in msgs %}
+                    <div class="ui floating massive brown message fade"><i class="icon info"></i>{{ msg }}</div>
+                            {%- endfor -%}
+                        {%- endif %}
+                    {%- endwith %}
+                    <div class="ui stackable grid" id="follow">
+                    <!--<div class="ui segment">-->
+                        <div class="three wide column">
+                            <!-- Navigation - left side -->
+                    <div class="ui rail" style="">
+                            <div class="ui sticky">
+                                <div class="ui vertical menu">
+                                    <div class="item">
+                                        <div class="header">Menu</div>
+                                        <div class="menu">
+                                        {{ nav_site }}
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="header">Social</div>
+                                        <div class="menu">
+                                        {{ nav_social }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="ui attached basic table">
+                                    <thead>
+                                        <tr>
+                                            <th>Most Voters</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                {%- for dict in user_data['votes'] %}
+                                        <tr>
+                                            <td>{{ dict['nickname'] }}</td>
+                                            <td>{{ dict['votes'] }}</td>
+                                        </tr>
+                                {%- endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
+                    <!-- Site content -->
+                    {%- block content %}
+                    {% endblock %}
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="ui inverted vertical footer segment">
+                <div class="ui container">
+                    <div class="ui stackable inverted divided equal height stackable grid">
+                        <div class="seven wide column">
+                            <h4 class="ui inverted teal header">About us</h4>
+                            <p>We are some doods, who want to provide the best Terraria online expirience and it is fun for us to make all this possible for a great community.</p>
+                        </div>
+                        <div class="three wide column">
+                            <h4 class="ui inverted teal header">Python</h4>
+                            <div class="ui inverted link list">
+                                <a class="item" target="_blank" href="http://flask.pocoo.org">Flask</a>
+                                <a class="item" target="_blank" href="https://python.org">Python</a>
+                            </div>
+                        </div>
+                        <div class="three wide column">
+                            <h4 class="ui inverted teal header">Webframework</h4>
+                            <div class="ui inverted link list">
+                                <a class="item" target="_blank" href="https://jquery.com">JQuery</a>
+                                <a class="item" target="_blank" href="http://semantic-ui.com/">Semantic UI</a>
+                            </div>
+                        </div>
+                        <div class="three wide column">
+                            <h4 class="ui inverted teal header">Other</h4>
+                            <div class="ui inverted link list">
+                                <a class="item" target="_blank" href="https://terraria.org">Terraria</a>
+                                <a class="item" target="_blank" href="https://github.com/Nama/A.T.S.P.-Website">Source on Github</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- JavaScript -->
+        {% assets filters="jsmin", output="js/packed.js",
+          'js/jquery.min.js', 'js/semantic.min.js', 'js/site.js', 'js/index.js', 'js/oldworlds.js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {%- if stats_server or backups %}
+        <script src="static/js/highstock.js"></script>
+        {%- endif %}
+        {%- if stats_server %}
+        <script type="text/javascript"><!--
+            $(function () {
+                $('#stats_server').highcharts({
+                    chart: { type: 'areaspline' },
+                    title: { text: '' },
+                    rangeSelector: {
+                        enabled: true,
+                        selected: 0,
+                        buttons: [{
+                            text: '1d',
+                            type: 'day',
+                            count: 1,
+                        },
+                        {
+                            text: '1w',
+                            type: 'day',
+                            count: 7,
+                        },
+                        {
+                            text: '1m',
+                            type: 'month',
+                            count: 1,
+                        },
+                        {
+                            text: '1y',
+                            type: 'year',
+                            count: 1,
+                        },
+                        {
+                            text: 'All',
+                            type: 'all',
+                            count: 1,
+                        }],
+                        buttonTheme: { style: { width: '120px' }},
+                    },
+                    xAxis: { type: 'datetime', range: 1 * 24 * 3600 * 1000 },
+                    yAxis: [{ // Regular Users Axis
+                        title: { text: 'Peak Online Users' },
+                        allowDecimals: false,
+                        min: 0,
+                    },
+                    { // Staff Axis
+                            title: { text: 'Staff Users' },
+                            allowDecimals: false,
+                            min: 0,
+                            opposite: true,
+                        }],
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: 'Total Users',
+                        color: '#00ff18',
+                        lineWidth: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{stats_server[0]}},
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, '#b3ffba'],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    },
+                    {
+                        name: 'Moderators',
+                        color: '#dc6e28',
+                        lineWidth: 1,
+                        yAxis: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{stats_server[1]}},
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, '#ff8635'],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    },
+                    {
+                        name: 'Administrators',
+                        color: '#c85050',
+                        lineWidth: 1,
+                        yAxis: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{stats_server[2]}},
+                        fillColor : {
+                            linearGradient : {
+                                 x1: 0,
+                                 y1: 0,
+                                 x2: 0,
+                                 y2: 1
+                            },
+                            stops : [
+                                [0, '#ff6767'],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    }]
+                });
+            });
+        --></script>
+        {%- endif %}
+        {%- if backups and user_data['user'][1] == 'superadmin' %}
+        <script type="text/javascript"><!--
+            $(function () {
+                $('#backups').highcharts({
+                    chart: { type: 'areaspline' },
+                    title: { text: '' },
+                    rangeSelector: {
+                        enabled: true,
+                        selected: 1,
+                        buttons: [{
+                            text: '1d',
+                            type: 'day',
+                            count: 1,
+                        },
+                        {
+                            text: '1w',
+                            type: 'day',
+                            count: 7,
+                        },
+                        {
+                            text: '1m',
+                            type: 'month',
+                            count: 1,
+                        },
+                        {
+                            text: '1y',
+                            type: 'year',
+                            count: 1,
+                        },
+                        {
+                            text: 'All',
+                            type: 'all',
+                            count: 1,
+                        }],
+                        buttonTheme: { style: { width: '120px' }},
+                    },
+                    xAxis: { type: 'datetime', range: 7 * 24 * 3600 * 1000 },
+                    yAxis: { // Regular Users Axis
+                        title: { text: 'File Sizes' },
+                        allowDecimals: false,
+                        min: 0,
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    series: [
+                    {
+                        name: 'Database',
+                        color: '#00ff18',
+                        lineWidth: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{backups[0]}},
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, '#84ff90'],
+                                [1, Highcharts.Color('#84ff90').setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    },
+                    {
+                        name: 'Server Files',
+                        //color: '#00ff18',
+                        lineWidth: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{backups[1]}},
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        }
+                    },
+                    {
+                        name: 'htdocs',
+                        color: '#ff0000',
+                        lineWidth: 1,
+                        marker: { symbol: "circle", radius: 3 },
+                        data: {{backups[2]}},
+                        fillColor : {
+                            linearGradient : {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops : [
+                                [0, '#ff7d7d'],
+                                [1, Highcharts.Color('#ff7d7d').setOpacity(0).get('rgba')]
+                            ]
+                        },
+                    },
+                    ]
+                });
+            });
+        --></script>
+        {%- endif %}
+    </body>
+</html>

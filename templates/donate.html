@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column">
+                <h1 class="ui teal dividing header">
+                    <i class="gift icon"></i>
+                    <div class="content">Donate
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                {%- if not current_user.is_active %}
+                <div class="ui red inverted segment"><strong>Attention!</strong> You need to be <strong>logged in</strong> to donate. Click on "Login" and type in your <strong>ingame nick and password</strong> and visit this site again.</div>
+                {%- endif %}
+                <div class="ui segment">
+                    <div class="ui teal segment">
+                        <h4>Donate with a PayPal Account</h4>
+                        <a class="ui big teal button" href="/donate_paypal" target="_blank" rel="nofollow">Donate via PayPal</a>
+                    </div>
+                    <div class="ui yellow segment">
+                        <h4>Donating without a PayPal Account</h4>
+                        <div class="ui red segment">Our preferred method of donation is PayPal, but if for some reason you can not or do not have access to a PayPal account, you can also donate via Fundrazr.</div>
+                        <ol>
+                            <li>Go to our <a href="/donate_fundrazr" target="_blank" rel="nofollow">Fundrazr</a> page</li>
+                            <li>Press the GIVE Button: <img src="fund_give.png" alt="Give Button"></li>
+                            <li>Select at least 5€ (<i>you can set a lower custom amount, but you wouldn't get VIP</i>) - press Continue</li>
+                            <li>Press continue to PayPal, a new window should open now.</li>
+                            <li>Click on "Buy as guest" <img src="fund_guest.png" alt="Guest Button"> and fill out the form</li>
+                            <li>Thats it, we get notified about your donation. Now write your email-address or real name into the #support-channel with your Charactername</li>
+                        </ol>
+                    </div>
+                </div>
+                {%- if user_data['staff'] %}
+                    {%- for user in donated %}
+                <span style="color:green">{{ user[0] }}</span> <span style="color:blue">{{ user[1] }}</span><br>
+                    {%- endfor %}
+                {%- endif %}
+            </div>
+            {%- endblock %}

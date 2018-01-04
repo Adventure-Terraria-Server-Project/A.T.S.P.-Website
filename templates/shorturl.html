@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column content">
+                <h1 class="ui teal dividing header">
+                    <i class="linkify icon"></i>
+                    <div class="content">URL Shortener
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                <div class="ui divided list">
+                    {%- for link in url_config %}
+                    <div class="item">
+                        <div class="header">
+                            <a href="http://s.yamahi.eu/{{ link[0] }}">{{ link[1] }}</a>
+                        </div>
+                        {{ link[2] }}
+                    </div>
+                    {%- endfor %}
+                </div>
+                {%- if staff %}
+                <form class="ui form" role="form" method="POST" action="/shorturl">
+                    <div class="two fields">
+                        <div class="four wide field">
+                            <label for="surl">Short URL</label>
+                            <input name="surl" type="text" class="form-control" id="surl" placeholder="Short URL">
+                        </div>
+                        <div class="twelve wide field">
+                            <label for="url">Long URL</label>
+                            <input name="url" type="url" class="form-control" id="url" placeholder="Long URL">
+                        </div>
+                    </div>
+                    <button type="submit" class="fluid ui basic button"><i class="floppy icon"></i>Save</button>
+                </form>
+                {%- endif %}
+            </div>
+            {%- endblock %}

@@ -1,0 +1,38 @@
+/* Colors */
+.color_green {
+    color: green !important;
+}
+.color_blue {
+    color: midnightblue !important;
+}
+.color_red {
+    color: red !important;
+}
+.color_orange {
+    color: darkorange !important;
+}
+.color_black {
+    color: black !important;
+}
+
+/* Sidebar */
+/*.ui.vertical.menu .ui.attached.basic.table {*/
+.ui.sticky {
+    width: 70% !important;
+    margin-bottom: 4%;
+}
+
+/* Footer */
+.footer.segment {
+    padding: 5em 0em;
+/*    bottom: 0px;
+    position: relative;
+    width: 100%; */
+}
+
+/*.sticky-static { position: static !important }
+.ui.bound.sticky { width: 100%; padding-right: 2em; }
+.ui.bound.sticky.bottom { padding-right: 0; }*/
+/*
+@media only screen and (max-width: 767px) { .sticky-hotfix { height: auto !important; } .sticky-hotfix .ui.sticky {position: static !important; width: auto !important; height: auto !important; margin: auto !important; left: inherit !important; right: inherit !important; } }
+*/

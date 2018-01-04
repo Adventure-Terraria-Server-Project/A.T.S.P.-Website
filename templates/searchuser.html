@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column content">
+                <h1 class="ui teal dividing header">
+                    <i class="search icon"></i>
+                    <div class="content">Search User
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                <form class="ui form" role="form" method="POST" action="/searchuser">
+                    <div class="field">
+                            <input name="nick" type="text" class="form-control" id="nick" placeholder="Search for a user" required>
+                    </div>
+                    <button type="submit" class="fluid ui basic button"><i class="search icon"></i>Search</button>
+                </form>
+                {%- if result %}
+                <br>
+                <div class="five ui blue buttons">
+                    {%- for user in result %}
+                        {%- if loop.index in range(6, 50, 5) %}
+                </div>
+                <div class="five ui blue buttons">
+                        {%- endif %}
+                    <a class="ui button" href="/invpars?user={{ user }}">{{ user }}</a>
+                    {%- endfor %}
+                </div>
+                {%- endif %}
+                <p></p>
+<div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            </div>
+            <br>
+            {%- endblock %}

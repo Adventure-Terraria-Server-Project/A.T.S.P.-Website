@@ -1,4 +1,3 @@
-// ------Progress Bars
 // One-Time overwrite for special times
 //var pbars_lastResetTime = new Date("May 6, 2013 16:00:00");
 //var pbars_hardmodeTimeOverride = new Date("May 17, 2013 16:00:00");
@@ -51,24 +50,24 @@ function pbars_Refresh() {
     var dayOfWeek = now.getUTCDay();
     var dayOfMonth = now.getUTCDate();
     var daysUntilSunday;
-    if (dayOfWeek == 0) // Sunday?
-        if (now.getUTCHours() < 18)
+    if (dayOfWeek == 6) // Sunday?
+        if (now.getUTCHours() < 21)
             daysUntilSunday = 0;
         else
-            daysUntilSunday = 7;
+            daysUntilSunday = 6;
         else
-            daysUntilSunday = 7 - dayOfWeek;
+            daysUntilSunday = 6 - dayOfWeek;
 
     var sundayOfTheWeek = dayOfMonth + daysUntilSunday;
-    var fridayOfTheWeek = sundayOfTheWeek - 3;
+    var fridayOfTheWeek = sundayOfTheWeek - 2;
 
     var isInvalidOverride = (typeof pbars_resetTimeOverride === 'undefined' || pbars_resetTimeOverride < now);
     if (typeof pbars_hardmodeTimeOverride === 'undefined' || isInvalidOverride)
-        var hardmodeDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), fridayOfTheWeek, 12, 0, 0, 0);
+        var hardmodeDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), fridayOfTheWeek, 0, 0, 0, 0);
     else
         var hardmodeDate = pbars_hardmodeTimeOverride;
     if (typeof pbars_resetTimeOverride === 'undefined' || isInvalidOverride)
-        var resetDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), sundayOfTheWeek, 18, 0, 0, 0);
+        var resetDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), sundayOfTheWeek, 21, 0, 0, 0);
     else
         var resetDate = pbars_resetTimeOverride;
 
@@ -83,16 +82,18 @@ function pbars_Refresh() {
         pbars_hardmodePercentage = Math.min(100 - ((timeUntilHardmodeMs / (hardmodeDate.getTime() - pbars_lastResetTime.getTime())) * 100), 100);
         pbars_resetPercentage = Math.min(100 - ((timeUntilResetMs / (resetDate.getTime() - pbars_lastResetTime.getTime())) * 100), 100);
     }
-    
-    document.getElementById("hardmodeBar").style.width = pbars_hardmodePercentage + "%";
-    document.getElementById("worldResetBar").style.width = pbars_resetPercentage + "%";
+
+    //document.getElementById("hardmodeBar").style.width = pbars_hardmodePercentage + "%";
+    //document.getElementById("worldResetBar").style.width = pbars_resetPercentage + "%";
 
     var hardmodeTimeSpanString;
     if (pbars_hardmodePercentage == 100)
         hardmodeTimeSpanString = "Hardmode is enabled!";
     else
         hardmodeTimeSpanString = pbars_MsToTimeSpanString(timeUntilHardmodeMs);
-    
+
+    $("#hardmodeBar").progress({percent: pbars_hardmodePercentage});
+    $("#worldResetBar").progress({percent: pbars_resetPercentage});
     document.getElementById("hardmodeText").innerHTML = hardmodeTimeSpanString;
     document.getElementById("worldResetText").innerHTML = pbars_MsToTimeSpanString(timeUntilResetMs);
 }

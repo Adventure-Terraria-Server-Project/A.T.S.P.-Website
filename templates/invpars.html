@@ -1,0 +1,150 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column main">
+                <h1 class="ui teal dividing header">
+                    <i class="shopping bag icon"></i>
+                    <div class="content">{{ p_list }}'s Inventory
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                {%- if inv %}
+                <h3><i class="user icon"></i>{{ p_list }} <i class="heart icon"></i>{{ inv['health'] }} <i class="star icon"></i>{{ inv['mana'] }} <i class="users icon"></i>{{ inv['group'] }}</h3>
+                <div class="ui segment">
+                    <table class="ui blue fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Inventory</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['inv'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index in (10, 20, 30, 40, 50) %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <table class="ui yellow fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Coins and Ammo</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['coins'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index == 10 %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <table class="ui green fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Vanity</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['vanity'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index == 10 %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <table class="ui orange fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Equipment</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['equipment'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index == 10 %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <table class="ui red fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Piggy Bank</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['piggy'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <table class="ui grey fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Safe</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['safe'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <table class="ui pink fixed celled table">
+                        <thead>
+                            <tr><th colspan="10"><div class="ui ribbon label">Forge</div></th></tr>
+                        </thead>
+                        <tr>
+                        {%- for item in inv['inv']['forge'] %}
+                            <td>
+                            {%- if item != 0 %}
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            {%- endif %}
+                            </td>
+                            {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
+                        </tr>
+                        <tr>
+                            {%- endif %}
+                        {%- endfor %}
+                        </tr>
+                    </table>
+                    <div class="ui grey segment">
+                        <h3 class="ui header">Trash</h3>
+                        {%- set item = inv['inv']['trash'] %}
+                        {%- if item != 0 %}
+                            <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                        {%- endif %}
+                    </div>
+                    {%- endif %}
+                </div>
+            </div>
+            <br>
+            {%- endblock %}

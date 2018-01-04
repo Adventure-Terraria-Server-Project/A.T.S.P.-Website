@@ -3,18 +3,14 @@
 '''tShock Database-connection-related features'''                             #
 #                                                                             #
 ###############################################################################
-import PIL
+
+
 import csv
 import cymysql
-import os
-import sys
-import urllib.request
 
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
 from conf import tshock_db
 from datetime import timedelta
+from datetime import datetime
 from time import time
 
 db_host = tshock_db.ip
@@ -49,19 +45,28 @@ def db_close(conn, cur):
 ###############################################################################
 
 
-# Requesting username with the ID
-def get_user(id):
+# Requesting user info
+def get_user(username):
     conn, cur = db_con()
-    cur.execute("SELECT * FROM `Users` WHERE `id` = %s LIMIT 1", (id))
+    cur.execute('SELECT `Username`,`Usergroup`,`ID` FROM `users` WHERE `Username` = %s LIMIT 1', (username))
     user = cur.fetchone()
     db_close(conn, cur)
     return user
 
 
-# Requesting ID with the username
-def get_user_by_name(username):
+# Requesting user info
+def get_user_by_id(id):
     conn, cur = db_con()
-    cur.execute("SELECT * FROM `Users` WHERE `Username` = %s LIMIT 1", (username))
+    cur.execute('SELECT `Username`,`Usergroup` FROM `users` WHERE `ID` = %s LIMIT 1', (id))
+    user = cur.fetchone()
+    db_close(conn, cur)
+    return user
+
+
+# Only used for login
+def get_login(username):
+    conn, cur = db_con()
+    cur.execute('SELECT `Username`,`Password` FROM `users` WHERE `Username` = %s LIMIT 1', (username))
     user = cur.fetchone()
     db_close(conn, cur)
     return user
@@ -79,7 +84,7 @@ def server_stats():
     totaluser = []
     totalnewadmin = []
     totaladmin = []
-    cur.execute("SELECT * FROM `Utils_ServerStatistics`")
+    cur.execute('SELECT * FROM `Utils_ServerStatistics`')
     for r in cur.fetchall():
         totaluser.append([r[0] * 1000, r[1]])
         totalnewadmin.append([r[0] * 1000, r[2]])
@@ -97,56 +102,56 @@ def server_stats():
 
 def banlist():
     conn, cur = db_con()
-    ipban = ''
-    nickban = ''
-    cur.execute("SELECT * FROM `BannedIP`")
+    ipban = list()
+    nickban = list()
+    cur.execute('SELECT * FROM `BannedIP` ORDER BY `BanDate` DESC')
     for r in cur.fetchall():
         btime = r[2] - time()
+        banned_time = datetime.utcfromtimestamp(int(r[1])).strftime('%Y.%m.%d %H:%M:%S')
         if r[2] == 0:
-            ipban += '<tr><td>%s</td><td>%s</td><td>%s</td><td></td></tr>' % (r[0], r[3], r[4])
+            ipban.append((r[0], banned_time, r[3], r[4]))
         elif r[2] > time():
-            ipban += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[4], format_timedelta(timedelta(seconds=btime)))
+            ipban.append((r[0], banned_time, r[3], r[4], format_timedelta(timedelta(seconds=btime))))
 
-    cur.execute("SELECT * FROM `BannedPlayer`")
+    cur.execute('SELECT * FROM `BannedPlayer` ORDER BY `BanDate` DESC')
     for r in cur.fetchall():
         btime = r[2] - time()
+        banned_time = datetime.utcfromtimestamp(int(r[1])).strftime('%Y.%m.%d %H:%M:%S')
         if r[2] == 0:
-            nickban += '<tr><td>%s</td><td>%s</td><td>%s</td><td></td></tr>' % (r[0], r[3], r[4])
+            nickban.append((r[0], banned_time, r[3], r[4]))
         elif r[2] > time():
-            nickban += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[4], format_timedelta(timedelta(seconds=btime)))
+            nickban.append((r[0], banned_time, r[3], r[4], format_timedelta(timedelta(seconds=btime))))
 
     db_close(conn, cur)
     return {'ipban': ipban, 'nickban': nickban}
 
 
-def dash_banned(user, ip):
+def dash_banned(user):
     conn, cur = db_con()
-    ipban = ''
-    nickban = ''
-    cur.execute("SELECT * FROM `BannedPlayer` WHERE `Player` = %s", (user))
-    for r in cur.fetchall():
-        btime = r[2] - time()
-        if r[2] == 0:
-            nickban += '<tr><td>%s</td><td>%s</td><td>%s</td><td>PermaBan</td></tr>' % (r[0], r[3], r[4])
-        elif r[2] > time():
-            nickban += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[4], format_timedelta(timedelta(seconds=btime)))
-    cur.execute("SELECT * FROM `BannedIP` WHERE `IP` = '%s'", (ip))
-    for r in cur.fetchall():
-        btime = r[2] - time()
-        if r[2] == 0:
-            ipban += '<tr><td>%s</td><td>%s</td><td>%s</td><td>PermaBan</td></tr>' % (r[0], r[3], r[4])
-        elif r[2] > time():
-            ipban += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], r[3], r[4], format_timedelta(timedelta(seconds=btime)))
+    ban = list()
+    cur.execute('SELECT * FROM `bannedplayer` WHERE `Player` = %s order by `UnbanDate` ASC', (user))
+    r = cur.fetchone()
+    if r:
+        ban.append(r[0])
+        ban.append(r[3])
+        ban.append(r[4])
+        if int(r[2]) == 0:
+            ban.append('PermaBan')
+        elif int(r[2]) > time():
+            btime = int(r[2]) - time()
+            ban.append(format_timedelta(timedelta(seconds=btime)))
+        else:
+            ban = None
 
     db_close(conn, cur)
-    return nickban, ipban
+    return ban
 
 
 # Format the ETA to a good readable format
 def format_timedelta(td):
     hours, remainder = divmod(td.seconds, 3600)
     minutes, seconds = divmod(remainder, 60)
-    return '%sd %sh %sm %ss' % (td.days, hours, minutes, seconds)
+    return '{0}d {1}h {2}m {3}s'.format(td.days, hours, minutes, seconds)
 
 
 ###############################################################################
@@ -158,20 +163,12 @@ def format_timedelta(td):
 
 def msg(user):
     conn, cur = db_con()
-    msgs = ''
-    count = 0
-    cur.execute("SELECT * FROM `MessagePlugin` WHERE `mailTo` = %s", (user))
+    msgs = list()
+    cur.execute('SELECT `mailFrom`,`mailText` FROM `messageplugin` WHERE `mailTo` = %s and `Seen` = 0', (user))
     for r in cur.fetchall():
-        if r[5] == 0:
-            msgs += '''<div class="panel panel-warning">
-                            <div class="panel-heading"><i class="fa fa-share"></i> %s</div>
-                            <div class="panel-body">%s</div>
-                        </div>
-''' % (r[1], r[3])
-            count += 1
-
+        msgs.append([r[0], r[1]])
     db_close(conn, cur)
-    return msgs, count
+    return msgs
 
 
 ###############################################################################
@@ -183,17 +180,12 @@ def msg(user):
 
 def item_bans():
     conn, cur = db_con()
-    b_items = ''
-    item_count = 0
-    cur.execute("SELECT `ItemName` FROM `ItemBans`")
+    banned_items = list()
+    cur.execute('SELECT `ItemName` FROM `ItemBans`')
     for r in cur.fetchall():
-        if item_count == 4:
-            b_items += '</tr><tr>'
-            item_count = 0
-        b_items += '<td>%s</td>' % r[0]
-        item_count += 1
+        banned_items.append(r[0])
     db_close(conn, cur)
-    return b_items
+    return banned_items
 
 
 ###############################################################################
@@ -205,13 +197,18 @@ def item_bans():
 
 def get_reports():
     conn, cur = db_con()
-    cur.execute('SELECT * FROM `Reports`')
-    reports = ''
+    cur.execute('SELECT `ReportID`,`UserID`,`ReportedID`,`Message` FROM `Reports` WHERE `state` != 2')
+    reports = list()
     for r in cur.fetchall():
-        userID = get_user(r[1])
-        reportedID = get_user(r[2])
-        if r[5] != 2:
-            reports += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (r[0], userID[1], reportedID[1], r[3])
+        userID = get_user_by_id(r[1])[0]
+        if r[2] != -1:
+            reportedID = get_user_by_id(r[2])[0]
+        else:
+            reportedID = 'Unknown ID'
+        try:
+            reports.append([r[0], userID, reportedID, r[3]])
+        except TypeError:
+            reports.append([r[0], r[1], r[2], r[3]])
     return reports
 
 
@@ -224,17 +221,11 @@ def get_reports():
 
 def search_user(user):
     conn, cur = db_con()
-    search = '%' + user + '%'
+    results = list()
+    search = '%{}%'.format(user)
     cur.execute('SELECT `Username` FROM `Users` WHERE `Username` LIKE %s LIMIT 50', (search))
-    results = '<div class="col-md-2">'
-    count = 0
     for r in cur.fetchall():
-        results += '<a href="/invpars?user=%s">%s</a><br>' % (r[0], r[0])
-        count += 1
-        if count == 10:
-            results += '</div><div class="col-md-2">'
-            count = 0
-    results += '</div>'
+        results.append(r[0])
     return results
 
 
@@ -245,27 +236,33 @@ def search_user(user):
 ###############################################################################
 
 
-def get_player_inv(player):
-    user_db = get_user_by_name(player)
-    if user_db:
+def get_player_inv(username):
+    user = get_user(username)
+    if user:
         conn, cur = db_con()
-        cur.execute('SELECT * FROM `tsCharacter` WHERE `Account` = %s LIMIT 1', (user_db[0]))
+        cur.execute('SELECT `Inventory`,`MaxHealth`,`MaxMana` FROM `tsCharacter` WHERE `Account` = %s LIMIT 1', (user[2]))
         user_info = cur.fetchone()
-        user_inv = inv_pars(user_info[5])
-        cur.execute('SELECT `Usergroup` FROM `Users` WHERE `ID` = %s', (user_info[0]))
-        group = cur.fetchone()
+        user_inv = inv_pars(user_info[0])
+        group = user[1]
         db_close(conn, cur)
-        return {'inv': user_inv, 'health': user_info[2], 'mana': user_info[4], 'group': group[0]}
+        return {'inv': user_inv, 'health': user_info[1], 'mana': user_info[2], 'group': group}
 
 
 def inv_pars(inventorystring):
     inventoryentries = inventorystring.split('~')
-    inv = ''
     count_inv = 0
-    count_row = 0
-    count_acc = 0
     items = dict()
     prefixes = dict()
+    inv = dict()
+    inv['inv'] = list()
+    inv['coins'] = list()
+    inv['ammo'] = list()
+    inv['vanity'] = list()
+    inv['equipment'] = list()
+    inv['piggy'] = list()
+    inv['safe'] = list()
+    inv['trash'] = ''
+    inv['forge'] = list()
 
     with open('items.tsv') as itemsfile:
         itemsreader = csv.reader(itemsfile, delimiter=',', quotechar='"')
@@ -279,79 +276,54 @@ def inv_pars(inventorystring):
 
     for row in inventoryentries:
         itemid, amount, prefixid = row.split(',')
-        if count_row < 5:
-            if count_inv == 10:
-                inv += '</tr><tr>'
-                count_inv = 0
-                count_row += 1
-        elif count_row >= 8:
-            if count_inv == 8:
-                inv += '</tr><tr>'
-                count_inv = 0
-        elif count_row == 7:
-            if count_inv == 1:
-                inv += '</tr><tr>'
-                count_inv = 0
-                count_row += 1
-        elif count_row >= 5:
-            if count_inv == 4:
-                inv += '</tr><tr>'
-                count_inv = 0
-                count_row += 1
-
-        if itemid in items.keys():
-            inv += '<td><img title="%s %s" src="items/Item_%s.png"><span class="badge">%s</span></td>' % (prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount)
-        else:
-            inv += '<td></td>'
+        if count_inv <= 50:
+            try:
+                inv['inv'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['inv'].append(0)
+        elif count_inv <= 58:
+            try:
+                inv['coins'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['coins'].append(0)
+        elif count_inv <= 78:
+            try:
+                inv['ammo'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['ammo'].append(0)
+        elif count_inv <= 88:
+            try:
+                inv['vanity'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['vanity'].append(0)
+        elif count_inv <= 98:
+            try:
+                inv['equipment'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['equipment'].append(0)
+        elif count_inv <= 138:
+            try:
+                inv['piggy'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['piggy'].append(0)
+        elif count_inv <= 178:
+            try:
+                inv['safe'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['safe'].append(0)
+        elif count_inv == 179:
+            try:
+                inv['trash'] = (prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount)
+            except KeyError:
+                inv['trash'] = 0
+        elif count_inv <= 220:
+            try:
+                inv['forge'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['forge'].append(0)
         count_inv += 1
 
     return inv
-
-
-def get_player_inv_sig(player, nick_pos):
-    user_db = get_user_by_name(player)
-    conn, cur = db_con()
-    cur.execute("SELECT * FROM `tsCharacter` WHERE `Account` = %s LIMIT 1", (user_db[0]))
-    user_info = cur.fetchone()
-    user_inv = inv_pars(user_info[5])
-    db_close(conn, cur)
-    return inv_pars_sig(user_info[5], player, nick_pos, user_info)
-
-
-def inv_pars_sig(inventorystring, user, nick_pos, user_info):
-    inventoryentries = inventorystring.split('~')
-    inv = ''
-    items = dict()
-    prefixes = dict()
-
-    with open('items.tsv') as itemsfile:
-        itemsreader = csv.reader(itemsfile, delimiter=',', quotechar='"')
-        for row in itemsreader:
-            items.update({row[0]: {'name': row[1]}})
-
-    with open('prefixes.tsv') as prefixfile:
-        prefixreader = csv.reader(prefixfile, delimiter='\t', quotechar='"')
-        for row in prefixreader:
-            prefixes.update({row[0]: {'name': row[1]}})
-
-    im_sig = Image.open('static/img/signatures/%s.png') % user
-    # Write User HP
-    draw = ImageDraw.Draw(im_sig)
-    font = ImageFont.truetype(font='fonts/Comfortaa.ttf', size=12)
-    w, h = draw.textsize('%s HP', font=font) % str(user_info[2])
-    draw.text(((360 - w) - 10, 69), '%s HP', (0, 0, 0), font=font) % str(user_info[2])
-    count = 0
-    w = int(nick_pos) - 15
-    for row in inventoryentries:
-        itemid, amount, prefixid = row.split(',')
-        im = Image.open('static/img/items/Item_%s.png') % itemid
-        im.thumbnail((15, 15), Image.ANTIALIAS)
-        w = w + 17
-        im_sig.paste(im, (w, 68), mask=im)
-        count += 1
-        if count == 5:
-            break
-    im_sig.save('static/img/signatures/%s.png') % user
 
 
 ###############################################################################
@@ -363,70 +335,33 @@ def inv_pars_sig(inventorystring, user, nick_pos, user_info):
 
 def lgroups():
     conn, cur = db_con()
-    '''List groups with players from MySQL DB'''
-    nickcount = 0
-    viplist = ''
+    viplist = list()
     g_colors = {'vip': '#3ec0ff', 'vip+': '#35ab75', 'vip++': '#ff9c00', 'supervip': '#467dff'}
-    cur.execute("SELECT * FROM `Users` WHERE `Usergroup` LIKE '%vip%'")
+    cur.execute('SELECT `Username`,`Usergroup` FROM `Users` WHERE `Usergroup` in ("vip", "vip+", "vip++", "supervip")')
     for r in cur.fetchall():
-        if nickcount == 4:
-            viplist += '</tr><tr>'
-            nickcount = 0
-        viplist += '<td style="color:%s">%s</td>' % (g_colors.get(r[4], '#467dff'), r[1])
-        nickcount += 1
-    if nickcount != 4:
-        while nickcount < 4:
-            viplist += '<td></td>'
-            nickcount += 1
+        viplist.append([g_colors.get(r[1], '#467dff'), r[0]])
 
-    nickcount = 0
-    newadminlist = ''
-    cur.execute("SELECT * FROM `Users` WHERE `Usergroup` = 'newadmin'")
+    builderlist = list()
+    cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` in ("builder", "trustedbuilder")')
     for r in cur.fetchall():
-        if nickcount == 5:
-            newadminlist += '</tr><tr>'
-            nickcount = 0
-        # If you can be sure, that the nicknames in these groups are exactly the same, then use these lines
-        # newadminlist += '<td><a href="https://terrariaforum.yamahi.eu/profile/%s">%s</a></td>' % urllib.request.pathname2url(r[1]), r[1]
-        # Else:
-        newadminlist += '<td class="text-warning">%s</a></td>' % r[1]
-        nickcount += 1
-    if nickcount != 5:
-        while nickcount < 5:
-            newadminlist += '<td></td>'
-            nickcount += 1
+        builderlist.append(r[0])
 
-    nickcount = 0
-    adminlist = ''
-    cur.execute("SELECT * FROM `Users` WHERE `Usergroup` = 'admin'")
+    newadminlist = list()
+    cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` = "newadmin"')
     for r in cur.fetchall():
-        if nickcount == 5:
-            adminlist += '</tr><tr>'
-            nickcount = 0
-        # adminlist += '<td><a href="https://terrariaforum.yamahi.eu/profile/%s">%s</a></td>' % urllib.request.pathname2url(r[1]), r[1]
-        adminlist += '<td class="text-danger">%s</a></td>' % r[1]
-        nickcount += 1
-    if nickcount != 5:
-        while nickcount < 5:
-            adminlist += '<td></td>'
-            nickcount += 1
+        newadminlist.append(r[0])
 
-    nickcount = 0
-    sadminlist = ''
-    cur.execute("SELECT * FROM `Users` WHERE `Usergroup` = 'superadmin'")
+    adminlist = list()
+    cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` = "admin"')
     for r in cur.fetchall():
-        if nickcount == 5:
-            sadminlist += '</tr><tr>'
-            nickcount = 0
-        # sadminlist += '<td><a href="https://terrariaforum.yamahi.eu/profile/%s">%s</a></td>' % urllib.request.pathname2url(r[1]), r[1]
-        sadminlist += '<td>%s</a></td>' % r[1]
-        nickcount += 1
-    if nickcount != 5:
-        while nickcount < 5:
-            sadminlist += '<td></td>'
-            nickcount += 1
+        adminlist.append(r[0])
 
-    groups = {'vips': viplist, 'newadmins': newadminlist, 'admins': adminlist, 'superadmins': sadminlist}
+    sadminlist = list()
+    cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` = "superadmin"')
+    for r in cur.fetchall():
+        sadminlist.append(r[0])
+
+    groups = {'vips': viplist, 'builder': builderlist, 'newadmins': newadminlist, 'admins': adminlist, 'superadmins': sadminlist}
 
     db_close(conn, cur)
     return groups

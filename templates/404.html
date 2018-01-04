@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column">
+                <h1 class="ui teal dividing header">
+                    <i class="ban icon"></i>
+                    <div class="content">Not Found
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                <div class="ui red inverted segment"><strong>Oh Snap!</strong> The page you are searching for is not here... Go back to the Dashboard or the Home.</div>
+                {%- if not current_user.is_active %}
+                <div class="ui red segment">You are not logged in. Some pages are only accessible if you are logged in.<br>
+                Make sure, that you click on "<strong>Login</strong>" and enter your ingame login credentials and try to access the page again.</div>
+                {%- endif %}
+            </div>
+            {%- endblock %}

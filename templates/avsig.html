@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column">
+                <h1 class="ui teal dividing header">
+                    <i class="image icon"></i>
+                    <div class="content">Avatar and Signature
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                <img src="{{ ava }}" alt="Avatar"> <img src="{{ sig }}" alt="Signature"><br><br>
+                <div class="ui teal segment">
+                    <h4>BBCode for Forums</h4>
+                    <code>[IMG]{{ ava }}[/IMG]</code><br>
+                    <code>[IMG]{{ sig }}[/IMG]</code>
+                </div>
+                <div class="ui yellow segment">
+                    <h4>HTML for Websites and Blogs</h4>
+                    <code>&#60;a href="https://yamahi.eu"&#62;&#60;img src="{{ava}}"&#62;&#60;/a&#62;</code><br>
+                    <code>&#60;a href="https://yamahi.eu"&#62;&#60;img src="{{sig}}"&#62;&#60;/a&#62;</code>
+                </div>
+            </div>
+            {%- endblock %}

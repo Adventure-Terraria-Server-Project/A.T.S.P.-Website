@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+                    {% block content %}
+                        <div class="thirteen wide column content">
+                            <div class="ui inverted segment">
+                                <div class="ui inverted accordion">
+                                    <div class="title"><i class="dropdown icon"></i> Information &amp; help</div>
+                                    <div class="content">
+                                        <ul>
+                                            <li><a target="_blank" href="http://s.yamahi.eu/rules">Rules</a></li>
+                                            <li><a target="_blank" href="http://s.yamahi.eu/contact">How to contact Staff</a></li>
+                                            <li><a target="_blank" href="http://s.yamahi.eu/guide">Guide for new players</a></li>
+                                            <li><a target="_blank" href="http://s.yamahi.eu/chat">Discord Chat</a></li>
+                                            <li><a target="_blank" href="https://steamcommunity.com/groups/a_t_s_p#announcements">News and Announcements</a></li>
+                                            <li><a target="_blank" href="http://s.yamahi.eu/forum">Information on A.T.S.P.</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="active title"><i class="dropdown icon"></i>About this Server</div>
+                                    <div class="active content">
+                                        <ul>
+                                            <li>ServerSideCharacter enabled.</li>
+                                            <li>On Thursday hardmode will trigger when the <i>Wall of Flesh</i> is defeated on the server's current map, this continues until Saturday.</li>
+                                            <li>The server World is reset every Saturday, use <a href="http://s.yamahi.eu/housing">Permanent Houses</a>.</li>
+                                            <li><strong>Make sure you read <a href="http://s.yamahi.eu/rules" target="_blank">the server rules here</a> to ensure you do not make any regrettable mistakes while enjoying your time on <i>A.T.S.P.</i></strong></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui teal segment">
+                            <h4>Time Left Until Hardmode is Available</h4>
+                            <div class="ui red active progress" id="hardmodeBar">
+                                <div class="bar">
+                                    <div class="progress"></div>
+                                </div>
+                                <div class="label" id="hardmodeText"></div>
+                            </div>
+                            <h4>Time Left Until World Reset</h4>
+                            <div class="ui blue active progress" id="worldResetBar">
+                                <div class="bar">
+                                    <div class="worldreset progress"></div>
+                                </div>
+                                <div class="label" id="worldResetText"></div>
+                            </div>
+                            </div>
+                            <div class="ui inverted segment">
+                                <div class="ui horizontal massive inverted relaxed list">
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">IP Address</div>
+                                            yamahi.eu / 5.9.115.198
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <div class="header">Port</div>
+                                            7878
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui segment">
+                                <div class="ui olive segment">
+                                    <h4 class="ui header">Adventure - Art - Community</h4>
+                                    <p>A.T.S.P. is excited to present THE Terraria adventure server! Explore our worlds while stockpiling gear, make yourself a home to show off your hard work and finally, experience hardmode on the weekend to put your effort to the test. If this does not satisfy your adventuring desires, explore our mazes, beat our custom dungeons and make further use of our gameplay-extending features such as advanced wiring, custom statues and many more!</p>
+                                </div>
+                                <div class="ui yellow segment">
+                                    <h4 class="ui header">Be secure</h4>
+                                    <p>Chests and other valuable objects are automatically protected upon placement, you can also protect whole buildings from change using our anti-grief plugins.</p>
+                                </div>
+                                <div class="ui purple segment">
+                                    <h4 class="ui header">Professionally made server</h4>
+                                    <p>The server is neither a home server nor a Hamachi server, we're a dedicated 24/7 root server hosted and manned by experienced adults. The server is even staffed with it's own developers!</p>
+                                </div>
+                                <div class="ui blue segment">
+                                    <h4 class="ui header">Help us out</h4>
+                                    <p>Although it's our hobby to host this server and let others have fun, this still comes at a price every month. While we force nobody to donate, we would be extremely grateful if you did. To encourage users to do so, everyone who donates 5 Euros or more recieves the special in-game rank "VIP". VIPs have access to more commands than regular players, can make use of more statues, own unlimited Bank Chests and more... Depending on the Donation-Type. <a href="http://s.yamahi.eu/vip">Click Here</a>!</p>
+                                </div>
+                                <strong>Give it a try, join us and have some fun!</strong>
+                            </div>
+                            <div class="ui styled fluid green accordion">
+                                <div class="title color_blue"><i class="dropdown icon"></i> VIP</div>
+                                <div class="content">
+                                    <table class="ui very basic table">
+                                        <tbody>
+                                            <tr>
+                                            {%- for user in groups['vips'] %}
+                                                {%- if loop.index0 in range(5, 1000, 5) %}
+                                            </tr>
+                                            <tr>
+                                                {%- endif %}
+                                                <td style="color:{{ user[0] }}">{{ user[1] }}</td>
+                                            {%- endfor %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="title color_green"><i class="dropdown icon"></i> Builder</div>
+                                <div class="content">
+                                    <table class="ui very basic table">
+                                        <tbody>
+                                            <tr>
+                                            {%- for user in groups['builder'] %}
+                                                {%- if loop.index0 in range(5, 1000, 5) %}
+                                            </tr>
+                                            <tr>
+                                                {%- endif %}
+                                                <td>{{ user }}</td>
+                                            {%- endfor %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="title color_orange"><i class="dropdown icon"></i> Moderator</div>
+                                <div class="content">
+                                    <table class="ui very basic table">
+                                        <tbody>
+                                            <tr>
+                                            {%- for user in groups['newadmins'] %}
+                                                {%- if loop.index0 in range(5, 1000, 5) %}
+                                            </tr>
+                                            <tr>
+                                                {%- endif %}
+                                                <td>{{ user }}</td>
+                                            {%- endfor %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="title color_red"><i class="dropdown icon"></i> Administrator</div>
+                                <div class="content">
+                                    <table class="ui very basic table">
+                                        <tbody>
+                                            <tr>
+                                            {%- for user in groups['admins'] %}
+                                                {%- if loop.index0 in range(5, 1000, 5) %}
+                                            </tr>
+                                            <tr>
+                                                {%- endif %}
+                                                <td>{{ user }}</td>
+                                            {%- endfor %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="title color_black"><i class="dropdown icon"></i> Executive</div>
+                                <div class="content">
+                                    <table class="ui very basic table">
+                                        <tbody>
+                                            <tr>
+                                            {%- for user in groups['superadmins'] %}
+                                                {%- if loop.index0 in range(5, 1000, 5) %}
+                                            </tr>
+                                            <tr>
+                                                {%- endif %}
+                                                <td>{{ user }}</td>
+                                            {%- endfor %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+            {%- endblock %}

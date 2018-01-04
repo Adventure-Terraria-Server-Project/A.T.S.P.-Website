@@ -1,0 +1,18 @@
+<a class="{% if request.path == '/' -%}active {% endif -%}item" href="/">Home<i class="home icon"></i></a>
+{%- if current_user.is_active %}
+<a class="{% if request.path == '/dash' -%}active {% endif -%}item" href="/dash">Dashboard<i class="dashboard icon"></i></a>
+{%- endif %}
+{%- if user_data['staff'] %}
+<a class="{% if request.path == '/bans' -%}active {% endif -%}item" href="/bans">Ban List<i class="list icon"></i></a>
+<a class="{% if request.path == '/searchuser' -%}active {% endif -%}item" href="/searchuser">Search &#38; Inventory<i class="search icon"></i></a>
+{%- endif %}
+<a class="item" target="_blank" href="/world-map">World Map<i class="image icon"></i></a>
+<a class="{% if request.path == '/motd-rules' -%}active {% endif -%}item" href="/motd-rules">MOTD &amp; Rules<i class="edit icon"></i></a>
+<a class="{% if request.path == '/shorturl' -%}active {% endif -%}item" href="/shorturl">Short URLs<i class="linkify icon"></i></a>
+<a class="{% if request.path == '/oldworlds' -%}active {% endif -%}item" href="/oldworlds">Old Worlds<i class="download icon"></i></a>
+{%- if current_user.is_active %}
+<a class="{% if request.path == '/embed' -%}active {% endif -%}item" href="/embed">Avatar &#38; Signature<i class="image icon"></i></a>
+<a class="item" href="/logout">Logout<i class="sign out icon"></i></a>
+{%- else %}
+<a class="item login_button">Login<i class="user icon"></i></a>
+{% endif %}
