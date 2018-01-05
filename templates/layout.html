@@ -4,7 +4,7 @@
         <title>{{ name }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <!--<meta name="theme-color" content="#a7ff8c">-->
+        <meta name="theme-color" content="#a7ff8c">
         <meta name="theme-color" content="#21ba45">
         <meta name="description" content="Adventure Terraria Server with weekly world cycle">
         <link rel="shortcut icon" href="static/img/favicon.ico">
@@ -76,9 +76,6 @@
                 <!-- Navbar - Index - Desktop - Banner -->
                 <div class="ui container">
                     <div class="ui large secondary inverted pointing menu">
-                        <a class="toc item">
-                            <i class="icon sidebar"></i>
-                        </a>
                         {{ nav_social }}
                         <div class="right menu">
                             <div class="item">
@@ -89,6 +86,23 @@
                                 {%- endif %}
                             </div>
                         </div>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Menu Phone -->
+                <div class="ui container">
+                    <div class="ui large secondary inverted pointing menu">
+                        <a class="toc item">
+                            <i class="icon sidebar"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ui vertical inverted sidebar menu">
+                    <div class="item">
+                    {{ nav_site }}
+                    </div>
+                    <div class="item">
+                    {{ nav_social }}
                     </div>
                 </div>
                 {%- endif %}
@@ -134,40 +148,42 @@
                     <div class="ui stackable grid" id="follow">
                     <!--<div class="ui segment">-->
                         <div class="three wide column">
+                            {%- if not user_data['mobile'] %}
                             <!-- Navigation - left side -->
-                    <div class="ui rail" style="">
-                            <div class="ui sticky">
-                                <div class="ui vertical menu">
-                                    <div class="item">
-                                        <div class="header">Menu</div>
-                                        <div class="menu">
-                                        {{ nav_site }}
+                            <div class="ui rail" style="">
+                                <div class="ui sticky">
+                                    <div class="ui vertical menu">
+                                        <div class="item">
+                                            <div class="header">Menu</div>
+                                            <div class="menu">
+                                            {{ nav_site }}
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="header">Social</div>
+                                            <div class="menu">
+                                            {{ nav_social }}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <div class="header">Social</div>
-                                        <div class="menu">
-                                        {{ nav_social }}
-                                        </div>
-                                    </div>
+                                    <table class="ui attached basic table">
+                                        <thead>
+                                            <tr>
+                                                <th>Most Voters</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                    {%- for dict in user_data['votes'] %}
+                                            <tr>
+                                                <td>{{ dict['nickname'] }}</td>
+                                                <td>{{ dict['votes'] }}</td>
+                                            </tr>
+                                    {%- endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <table class="ui attached basic table">
-                                    <thead>
-                                        <tr>
-                                            <th>Most Voters</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                {%- for dict in user_data['votes'] %}
-                                        <tr>
-                                            <td>{{ dict['nickname'] }}</td>
-                                            <td>{{ dict['votes'] }}</td>
-                                        </tr>
-                                {%- endfor %}
-                                    </tbody>
-                                </table>
                             </div>
-                        </div>
+                            {% endif %}
                         </div>
                     <!-- Site content -->
                     {%- block content %}
@@ -181,7 +197,7 @@
                     <div class="ui stackable inverted divided equal height stackable grid">
                         <div class="seven wide column">
                             <h4 class="ui inverted teal header">About us</h4>
-                            <p>We are some doods, who want to provide the best Terraria online expirience and it is fun for us to make all this possible for a great community.</p>
+                            <p>We are some doods, who want to provide the best Terraria online experience and it is fun for us to make all this possible for a great community.</p>
                         </div>
                         <div class="three wide column">
                             <h4 class="ui inverted teal header">Python</h4>
@@ -194,7 +210,7 @@
                             <h4 class="ui inverted teal header">Webframework</h4>
                             <div class="ui inverted link list">
                                 <a class="item" target="_blank" href="https://jquery.com">JQuery</a>
-                                <a class="item" target="_blank" href="http://semantic-ui.com/">Semantic UI</a>
+                                <a class="item" target="_blank" href="https://semantic-ui.com/">Semantic UI</a>
                             </div>
                         </div>
                         <div class="three wide column">
