@@ -12,13 +12,13 @@
                 <div class="ui segment">
                     <table class="ui blue fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Inventory</div></th></tr>
+                        <tr><th colspan="10"><div class="ui blue label">Inventory</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['inv'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index in (10, 20, 30, 40, 50) %}
@@ -30,13 +30,13 @@
                     </table>
                     <table class="ui yellow fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Coins and Ammo</div></th></tr>
+                            <tr><th colspan="10"><div class="ui yellow label">Coins and Ammo</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['coins'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index == 10 %}
@@ -48,13 +48,13 @@
                     </table>
                     <table class="ui green fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Vanity</div></th></tr>
+                            <tr><th colspan="10"><div class="ui green label">Vanity</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['vanity'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index == 10 %}
@@ -66,13 +66,13 @@
                     </table>
                     <table class="ui orange fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Equipment</div></th></tr>
+                            <tr><th colspan="10"><div class="ui orange label">Equipment</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['equipment'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index == 10 %}
@@ -84,13 +84,13 @@
                     </table>
                     <table class="ui red fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Piggy Bank</div></th></tr>
+                            <tr><th colspan="10"><div class="ui red label">Piggy Bank</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['piggy'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
@@ -102,13 +102,13 @@
                     </table>
                     <table class="ui grey fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Safe</div></th></tr>
+                            <tr><th colspan="10"><div class="ui grey label">Safe</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['safe'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
@@ -120,13 +120,13 @@
                     </table>
                     <table class="ui pink fixed celled table">
                         <thead>
-                            <tr><th colspan="10"><div class="ui ribbon label">Forge</div></th></tr>
+                            <tr><th colspan="10"><div class="ui pink label">Forge</div></th></tr>
                         </thead>
                         <tr>
                         {%- for item in inv['inv']['forge'] %}
                             <td>
                             {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui floating label">{{ item[3] }}</div>
                             {%- endif %}
                             </td>
                             {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
@@ -140,7 +140,7 @@
                         <h3 class="ui header">Trash</h3>
                         {%- set item = inv['inv']['trash'] %}
                         {%- if item != 0 %}
-                            <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><span class="badge">{{ item[3] }}</span>
+                            <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
                         {%- endif %}
                     </div>
                     {%- endif %}

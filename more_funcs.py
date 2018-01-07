@@ -10,6 +10,7 @@ import os
 import time
 import pickle
 import urllib.request
+from json.decoder import JSONDecodeError
 
 from PIL import Image
 from PIL import ImageDraw
@@ -153,10 +154,15 @@ def voters():
         with urllib.request.urlopen(req) as j_data:
             encoding = j_data.info().get_content_charset('utf-8')
             data = j_data.read().decode(encoding)
-            votes = json.loads(data).get('voters')
-            with open('data.pickle', 'wb') as f:
-                pickle.dump(votes, f, pickle.HIGHEST_PROTOCOL)
-    else:
+            try:
+                votes = json.loads(data).get('voters')
+                with open('data.pickle', 'wb') as f:
+                    pickle.dump(votes, f, pickle.HIGHEST_PROTOCOL)
+            except JSONDecodeError:
+                with open('data.pickle', 'rb') as f:
+                    votes = pickle.load(f)
+
+    if not votes:
         with open('data.pickle', 'rb') as f:
             votes = pickle.load(f)
     return votes

@@ -11,10 +11,10 @@
 
         <!-- OGP -->
         <meta name="twitter:card" content="summary" />
-        <meta property="og:url" content="https://dev.yamahi.eu/" />
+        <meta property="og:url" content="https://yamahi.eu/" />
         <meta property="og:title" content="{{ name }}" />
         <meta property="og:description" content="This is our adventure Terraria Server with weekly world cycles, free build, free to explore and meaningful plugins!" />
-        <meta property="og:image" content="https://dev.yamahi.eu/banner.png" />
+        <meta property="og:image" content="https://yamahi.eu/banner.png" />
         <meta property="og:image:alt" content="Banner" />
         <meta property="og:type" content="website" />
 
@@ -69,6 +69,22 @@
                     </form>
                 </div>
             </div>
+            {%- if user_data['mobile'] %}
+            <!-- Menu Phone -->
+                <div class="ui stackable menu">
+                    <a class="toc item">
+                        <i class="icon sidebar"></i>
+                    </a>
+                </div>
+            <div class="ui vertical inverted sidebar menu">
+                <div class="item">
+                {{ nav_site }}
+                </div>
+                <div class="item">
+                {{ nav_social }}
+                </div>
+            </div>
+            {% endif %}
             {%- if request.path == '/' %}
             <!-- Index - Desktop - Banner -->
             <div class="ui vertical masthead center aligned segment" style="background-image: url(static/img/screenshots/b_{{ image|random() }}) !important;">
@@ -86,23 +102,6 @@
                                 {%- endif %}
                             </div>
                         </div>
-                    </div>
-                </div>
-                {% else %}
-                <!-- Menu Phone -->
-                <div class="ui container">
-                    <div class="ui large secondary inverted pointing menu">
-                        <a class="toc item">
-                            <i class="icon sidebar"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ui vertical inverted sidebar menu">
-                    <div class="item">
-                    {{ nav_site }}
-                    </div>
-                    <div class="item">
-                    {{ nav_social }}
                     </div>
                 </div>
                 {%- endif %}
@@ -169,7 +168,7 @@
                                     <table class="ui attached basic table">
                                         <thead>
                                             <tr>
-                                                <th>Most Voters</th>
+                                                <th>Top Voters</th>
                                             </tr>
                                         </thead>
                                         <tbody>
