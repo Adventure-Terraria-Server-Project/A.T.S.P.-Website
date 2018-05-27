@@ -20,7 +20,11 @@
     width: 70% !important;
     margin-bottom: 4%;
 }
-
+.ui.sticky.bound.bottom,
+.ui.sticky.fixed.bottom {
+    bottom: auto !important;
+}
+         
 /* Mobile Menu */
 .ui.menu {
     margin: 0 0;
@@ -29,4 +33,12 @@
 /* Footer */
 .footer.segment {
     padding: 5em 0em;
+}
+.pusher {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+.main {
+    flex: 1;
 }

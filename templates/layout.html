@@ -112,7 +112,12 @@
                         <div class="row render">
                             <p style="font-size: 14px">
                                 {%- for player in player_list %}
-                                <span data-tooltip="{{ player[0] }}" data-position="bottom center" class="render"><img title="{{ player[1] }}" alt="{{ player[1] }}" src="Char%20Renders/{{ player[1] }}.png"></span>
+                                    {% if player[1] != 'guest' %}
+                                        {% set render = 'Char%20Renders/' + player[1] %}
+                                    {% else %}
+                                        {% set render = 'guest' %}
+                                    {% endif %}
+                                <span data-tooltip="{{ player[0] }}" data-position="bottom center" class="render"><img title="{{ player[1] }}" alt="{{ player[1] }}" src="{{ render }}.png"></span>
                                 {%- endfor %}
                             </p>
                         </div>

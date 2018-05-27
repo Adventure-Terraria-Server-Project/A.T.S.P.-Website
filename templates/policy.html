@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+            {% block content %}
+            <div class="thirteen wide column">
+                <h1 class="ui teal dividing header">
+                    <i class="image icon"></i>
+                    <div class="content">Privacy Policy
+                        <div class="sub header">{{ name }}</div>
+                    </div>
+                </h1>
+                <div class="ui teal segment">
+                    <h4>Website</h4>
+                    We don't use cookies or any other methods to track visitors about their visits on the website.
+                </div>
+                <div class="ui yellow segment">
+                    <h4>Terraria Server</h4>
+                    <p>The Terraria Server collects information about the user-account to provide fair gameplay and to enforce the server rules.</p>
+                    <ul>
+                        <li>Username: essential, for login</li>
+                        <li>Email: optional, for recovering your password</li>
+                        <li>IP-Address: logging</li>
+                    </ul>
+                    <p>Every data from all users will be pruned after an inactivity of 6 months. This excludes users which donated. Their user-account will be kept.</p>
+                    <p>We get your name and Email-Address with every donation from Paypal.</p>
+                </div>
+            </div>
+            {%- endblock %}

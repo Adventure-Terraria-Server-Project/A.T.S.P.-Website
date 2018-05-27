@@ -352,7 +352,7 @@ def lgroups():
         newadminlist.append(r[0])
 
     adminlist = list()
-    cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` = "admin"')
+    cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` in ("admin", "admin+")')
     for r in cur.fetchall():
         adminlist.append(r[0])
 

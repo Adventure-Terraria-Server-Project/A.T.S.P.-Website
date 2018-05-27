@@ -88,7 +88,7 @@ def get_data(page):
     user_id_grp = get_group(current_user.get_id())
 
     # Check if staff
-    if user_id_grp[1] in ('newadmin', 'admin', 'superadmin'):
+    if user_id_grp[1] in ('newadmin', 'admin', 'admin+', 'superadmin'):
         user_staff = True
     else:
         user_staff = False
@@ -463,6 +463,22 @@ def embed():
     sig = url_for('create_sig', _scheme='https', _external='True', user=user_data['user'][0])
 
     return render_template('avsig.html', user_data=user_data, name=name, sig=sig, ava=ava)
+
+
+###############################################################################
+#                                                                             #
+'''Privacy Policy'''                                                          #
+#                                                                             #
+###############################################################################
+
+
+@app.route('/privacy-policy')
+@flask_optimize.optimize(cache=False)
+def policy():
+    # Get User-Info and Recent Online Users
+    user_data = get_data('policy')
+
+    return render_template('policy.html', user_data=user_data, name=name)
 
 
 ###############################################################################
