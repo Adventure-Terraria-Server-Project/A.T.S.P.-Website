@@ -6,7 +6,9 @@
 <a class="{% if request.path == '/bans' -%}active {% endif -%}item" href="/bans">Ban List<i class="list icon"></i></a>
 <a class="{% if request.path == '/searchuser' -%}active {% endif -%}item" href="/searchuser">Search &#38; Inventory<i class="search icon"></i></a>
 {%- endif %}
+{%- if user_data['user'][1] in ['vip', 'vip+', 'vip++', 'supervip', 'builder'] or user_data['staff'] %}
 <a class="item" target="_blank" href="/world-map">World Map<i class="image icon"></i></a>
+{%- endif %}
 <a class="{% if request.path == '/motd-rules' -%}active {% endif -%}item" href="/motd-rules">MOTD &amp; Rules<i class="edit icon"></i></a>
 <a class="{% if request.path == '/shorturl' -%}active {% endif -%}item" href="/shorturl">Short URLs<i class="linkify icon"></i></a>
 <a class="{% if request.path == '/oldworlds' -%}active {% endif -%}item" href="/oldworlds">Old Worlds<i class="download icon"></i></a>

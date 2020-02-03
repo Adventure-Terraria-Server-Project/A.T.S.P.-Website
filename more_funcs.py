@@ -10,7 +10,6 @@ import os
 import time
 import pickle
 import urllib.request
-from json.decoder import JSONDecodeError
 
 from PIL import Image
 from PIL import ImageDraw
@@ -158,7 +157,7 @@ def voters():
                 votes = json.loads(data).get('voters')
                 with open('data.pickle', 'wb') as f:
                     pickle.dump(votes, f, pickle.HIGHEST_PROTOCOL)
-            except JSONDecodeError:
+            except KeyError:
                 with open('data.pickle', 'rb') as f:
                     votes = pickle.load(f)
 

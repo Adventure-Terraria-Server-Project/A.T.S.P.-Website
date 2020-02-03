@@ -8,8 +8,9 @@ $('.menu .item').tab();
 $('.ui.sticky').sticky({
     context: '#follow',
     offset: 60,
+    jitter: 10,
     observeChanges: true,
-    //pushing: true
+    pushing: true
 });
 // Make Login Modal work
 $('.modal.login').modal('attach events', '.login_button', 'show');

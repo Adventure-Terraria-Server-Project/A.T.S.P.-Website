@@ -95,6 +95,23 @@ def server_stats():
 
 ###############################################################################
 #                                                                             #
+'''Show group permission for superadmin'''                                    #
+#                                                                             #
+###############################################################################
+
+
+def group_permissions():
+    conn, cur = db_con()
+    groups = []
+    cur.execute('SELECT * FROM `grouplist`')
+    for r in cur.fetchall():
+        groups.append(r)
+    db_close(conn, cur)
+    return groups
+
+
+###############################################################################
+#                                                                             #
 '''Banlists'''                                                                #
 #                                                                             #
 ###############################################################################

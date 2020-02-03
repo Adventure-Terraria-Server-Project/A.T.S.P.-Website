@@ -2,6 +2,7 @@
 
 ## General
 I tried to keep the code pep8 conform via the help of SublimeLinter, but I ignored the max. line-length rule...  
+The code is *as is* with some unpublished things.  
 You need some work and dependencies to make it run.
 
 ### Installation
@@ -11,24 +12,22 @@ You need some work and dependencies to make it run.
  * cymysql 0.8.1
  * flask 0.10.1
  * flask-login 0.2.11
- * flask-optimize 0.2.7
- * flask-assets 0.12
- * cssmin 0.2.0
- * jsmin 2.2.2
- * waitress 1.0.2
+ * watress 1.1.0
+ * httpagentparser 1.7.7
  * itsdangerous 0.24
  * pillow 2.8.1
-* Configure conf.py to your needs
-* Put Semantic-UI .css files in static/css/
+* Configure and conf.py to your needs
+* Put Semantic UI .css files in static/css/
 * Put all the fonts of css in static/css/fonts/
-* Put JQuery, Semantic-UI and highstock in static/js/
+* Put JQuery, Semantic UI, moment and highstock in static/js/
 * Item-render are needed for the Inventory Parser. Extract the images from the game and put them in static/img/items/
 * run ``python app.py``
 
 ### Powered by
  * [Flask]
- * [Semantic-UI]
+ * [Semantic UI]
  * [Highstock]
+ * [Moment]
  * Dozen of other things
  * Magic
 
@@ -37,23 +36,25 @@ You need some work and dependencies to make it run.
   * [Blocked]
   * [Comfortaa]
   * [Harabara]
+  * [Micro]
 
 ### tShock plugins
 * [MessagePlugin]
 * [Reports]
 * [ExtendedBans]
 * [Map]
+* [ShortCommands]
 * Custom A.T.S.P. plugins I can't share
 
 ## Features
 ### Main Page
-* Index is mobile compatible - can be switched via "Show desktop version" (*UserAgent dependant*)
-* Screenshots on the index
+* Fully mobile compatible - can be switched via "Show desktop version" (*UserAgent dependant*)
+* Random background images
  * Just throw in your full images in static/img/screenshots/original and the thumbnails are created automagically
 * Shows the amount of players currently online
 * Shows every player with his character and tooltip (*character renders aren't created with the website*)
-* Shows how long it is so Hardmode is activated on the server and to World Reset.
-* Shows members of the groups *newadmin*, *admin*, *superadmin*, *vip*, *vip+*, *vip++* and *superadmin*
+* Shows how long it is so Hardmode is activated on the server and to World Reset. index.js handles these
+* Shows members of the groups *newadmin*, *admin*, *superadmin*, *vip*, *vip+* and *vip++*
  * VIPs are colored depending on rank
 * Some links and fancy colorful buttons :3
 
@@ -74,7 +75,14 @@ You need some work and dependencies to make it run.
 * Hides unbanned entries, either via command or time-based bans
 
 ### World Map
-* Generated via the Map plugin
+* Only supervip, newadmins and higher
+* World Map, generated via the [Map] plugin
+
+### Inventory Parser
+* Only newadmin and higher
+* Inventory of currently online players
+* Group, health and mana
+* Enter a exact username to see the inventory of a offline user
 
 ### User Searcher
 * Only newadmin and higher
@@ -102,14 +110,17 @@ You need some work and dependencies to make it run.
 * Download links of previous worlds
 * They are added during the Apocalypse via a bash-script to the folder and database
 
-[Semantic-UI]:https://semantic-ui.com/
+[Semantic UI]:https://semantic-ui.com/
+[Moment]:https://momentjs.com/
 [flask]:http://flask.pocoo.org/
 [blocked]:http://www.dafont.com/de/blocked.font
 [comfortaa]:http://www.dafont.com/de/comfortaa.font
 [harabara]:http://www.dafont.com/de/harabara.font
+[micro]:http://www.dafont.com/de/micro.font
 [MessagePlugin]:https://github.com/Stealownz/MessagePlugin
 [reports]:https://tshock.co/xf/index.php?resources/reports.69/
 [ExtendedBans]:https://github.com/Stealownz/ExtendedBans
 [map]:https://tshock.co/xf/index.php?resources/map.18/
+[shortcommands]:https://github.com/Stealownz/ShortCommands
 [shorturl]:https://gist.github.com/Nama/c318c92109c8bf5c52c9
 [highstock]:http://www.highcharts.com/stock/demo/

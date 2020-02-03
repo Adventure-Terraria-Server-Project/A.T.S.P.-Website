@@ -72,6 +72,22 @@
                     <div id="stats_server" style="width: 100%; height: 400px"></div>
                 </div>
                 {%- if user_data['user'][1] == 'superadmin' %}
+                    <div class="ui violet segment">
+                <div class="ui accordion">
+                    {% for group in permissions %}
+                        <div class="title"><i class="dropdown icon"></i> <i class="users icon red"></i>{{ group[0] }} <i class="venus mars icon green"></i>{{ group[1] }} <i class="paint brush icon blue"></i>{{ group[3] }} <i class="angle double left icon yellow"></i>{{ group[4] }} <i class="angle double right icon yellow"></i>{{ group[5] }}</div>
+                        <div class="content">
+                        <div class="ui aligned padded grid">
+
+                            {% for permission in group[2].split(',') %}
+                                <div class="four wide white column"><!--<div class="ui compact message">--><p {% if permission.startswith('!') %} style="color: red"{% endif %}>{{ permission }}</p></div><!--</div>-->
+                            {% endfor %}
+
+                        </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                </div>
                 <div class="ui red segment"><h4 class="ui header"><i class="bar chart icon"></i>Backup Filesize</h4>
                     <div id="backups" style="width: 100%; height: 400px"></div>
                 </div>

@@ -46,6 +46,7 @@ from db_funcs import lgroups
 from db_funcs import msg
 from db_funcs import search_user
 from db_funcs import server_stats
+from db_funcs import group_permissions
 from more_funcs import *
 
 '''Inits'''
@@ -149,7 +150,7 @@ def dash():
     user_data = get_data('dash')
 
     stats_server = server_stats()
-
+    permissions = group_permissions()
     banned_items = item_bans()
     reports = get_reports()
     if user_data['user'][1] == 'superadmin':
@@ -160,7 +161,7 @@ def dash():
     bans = dash_banned(user_data['user'][0])
     msgs = msg(user_data['user'][0])
 
-    return render_template('dash.html', user_data=user_data, name=name, stats_server=stats_server, banned_items=banned_items, bans=bans, msgs=msgs, backups=backups, reports=reports)
+    return render_template('dash.html', user_data=user_data, name=name, stats_server=stats_server, banned_items=banned_items, bans=bans, msgs=msgs, backups=backups, reports=reports, permissions=permissions)
 
 
 ###############################################################################
@@ -389,9 +390,15 @@ def donate_fundrazr():
 
 
 @app.route('/world-map')
+@login_required
 def show_world():
-    return send_from_directory(conf.world_map, 'world-now.png')
+    # Get User-Info and Recent Online Users
+    user_data = get_data('world-map')
 
+    if user_data['user'][1] in ['vip', 'vip+', 'vip++', 'supervip', 'builder'] or user_data['staff']:
+        return send_from_directory(conf.world_map, 'world-now.png')
+    else:
+        return redirect(url_for('not_found', _scheme='https', _external='True'))
 
 ###############################################################################
 #                                                                             #

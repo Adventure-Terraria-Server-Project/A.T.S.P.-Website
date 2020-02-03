@@ -1,105 +1,93 @@
-// One-Time overwrite for special times
-//var pbars_lastResetTime = new Date("May 6, 2013 16:00:00");
-//var pbars_hardmodeTimeOverride = new Date("May 17, 2013 16:00:00");
-//var pbars_resetTimeOverride = new Date("May 19, 2013 16:00:00");
+// NOTE: this script requires jquery and moment.js
 
-var DayMs = 86400000;
-var HourMs = 3600000;
-var MinuteMs = 60000;
+function autoUpdateDurationBars() {
+	// Configure the time of hardmode and worldreset here by defining the weekly offset of it starting from sunday 0:00
+	// (e.g. if hardmode is on wednesday, 18:00 utc put this: "3 18:00")
+	const hardmodeTimeOfWeek = moment.duration("3 19:00");
+	const worldResetTimeOfWeek = moment.duration("6 17:00");
+	
+	function updateBars()
+	{
+		const now = moment();
+		const sundayOfTheWeek = moment(now).startOf("week").add(moment().utcOffset(), "minutes");
+		const sundayOfTheNextWeek = moment(sundayOfTheWeek).add(7, "days");
+		
+		let hardmodeTime = moment(sundayOfTheWeek).add(hardmodeTimeOfWeek);
+		let worldResetTime = moment(sundayOfTheWeek).add(worldResetTimeOfWeek);
+		// time must be fixed if world reset has already happened on the same day
+		if (worldResetTime.isBefore(now))
+		{
+			worldResetTime = moment(sundayOfTheNextWeek).add(worldResetTimeOfWeek);
+			hardmodeTime = moment(sundayOfTheNextWeek).add(hardmodeTimeOfWeek);
+		}
 
-var pbars_hardmodePercentage;
-var pbars_resetPercentage;
+		const lastWorldResetTime = moment(worldResetTime).subtract(1, "week");
+		const durationSinceReset = moment.duration(now.diff(lastWorldResetTime));
+		
+		const hardmodeDuration = moment.duration(hardmodeTime.diff(lastWorldResetTime));
+		const worldResetDuration = moment.duration(1, "week");
+		
+		const hardmodeProgress = Math.min(1, durationSinceReset.asMilliseconds() / hardmodeDuration.asMilliseconds()) * 100;
+		const worldResetProgress = Math.min(1, durationSinceReset.asMilliseconds() / worldResetDuration.asMilliseconds()) * 100;
+		
+		$("#hardmodeText").html(formatTimeAsBarString(now, hardmodeTime, "Hardmode is enabled!"));
+		$("#worldResetText").html(formatTimeAsBarString(now, worldResetTime, ""));
+		$("#hardmodeBar").progress({percent: hardmodeProgress});
+		$("#worldResetBar").progress({percent: worldResetProgress});
+	}
+	
+	function formatTimeAsBarString(now, time, overdueString) {
+		if (now.isBefore(time))
+		{
+			const duration = moment.duration(time.diff(now));
+			return msToTimeSpanString(duration) + " (at " + time.format("dddd HH:mm") + " in your current timezone)";
+		}
+		else
+		{
+			return overdueString;
+		}
+	}
+	
+	function msToTimeSpanString(ms) {
+		const dayMs = 86400000;
+		const hourMs = 3600000;
+		const minuteMs = 60000;
+		
+		var leftMs = ms;
+		var days = Math.floor(leftMs / dayMs);
+		leftMs -= dayMs * days;
+		var hours = Math.floor(leftMs / hourMs);
+		leftMs -= hourMs * hours;
+		var minutes = Math.floor(leftMs / minuteMs);
 
-function pbars_MsToTimeSpanString(ms) {
-    var leftMs = ms;
-    var days = Math.floor(leftMs / DayMs);
-    leftMs -= DayMs * days;
-    var hours = Math.floor(leftMs / HourMs);
-    leftMs -= HourMs * hours;
-    var minutes = Math.floor(leftMs / MinuteMs);
+		var result = "";
+		if (days == 0 && hours == 0 && minutes == 0)
+			return "less than one minute!";
 
-    var string = "";
-    if (days == 0 && hours == 0 && minutes == 0)
-        return "less than one minute remaining!";
+		if (days > 0)
+			if (days == 1)
+				result += "1 day ";
+		else
+			result += days + " days ";
 
-    if (days > 0)
-        if (days == 1)
-            string += "1 day ";
-    else
-        string += days + " days ";
+		if (hours > 0)
+			if (hours == 1)
+				result += "1 hour ";
+		else
+			result += hours + " hours ";
 
-    if (hours > 0)
-        if (hours == 1)
-            string += "1 hour ";
-    else
-        string += hours + " hours ";
+		if (minutes > 0)
+			if (minutes == 1)
+				result += "1 minute ";
+			else
+				result += minutes + " minutes ";
 
-    if (minutes > 0)
-        if (minutes == 1)
-            string += "1 minute ";
-        else
-            string += minutes + " minutes ";
-
-    string += "remaining";
-
-    return string;
-};
-
-function pbars_Refresh() {
-    var now = new Date();
-    var dayOfWeek = now.getUTCDay();
-    var dayOfMonth = now.getUTCDate();
-    var daysUntilSunday;
-    if (dayOfWeek == 6) // Sunday?
-        if (now.getUTCHours() < 21)
-            daysUntilSunday = 0;
-        else
-            daysUntilSunday = 6;
-        else
-            daysUntilSunday = 6 - dayOfWeek;
-
-    var sundayOfTheWeek = dayOfMonth + daysUntilSunday;
-    var fridayOfTheWeek = sundayOfTheWeek - 2;
-
-    var isInvalidOverride = (typeof pbars_resetTimeOverride === 'undefined' || pbars_resetTimeOverride < now);
-    if (typeof pbars_hardmodeTimeOverride === 'undefined' || isInvalidOverride)
-        var hardmodeDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), fridayOfTheWeek, 0, 0, 0, 0);
-    else
-        var hardmodeDate = pbars_hardmodeTimeOverride;
-    if (typeof pbars_resetTimeOverride === 'undefined' || isInvalidOverride)
-        var resetDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), sundayOfTheWeek, 21, 0, 0, 0);
-    else
-        var resetDate = pbars_resetTimeOverride;
-
-    var nowMs = now.getTime() + (now.getTimezoneOffset() * MinuteMs);
-    var timeUntilHardmodeMs = hardmodeDate.getTime() - nowMs;
-    var timeUntilResetMs = resetDate.getTime() - nowMs;
-
-    if (typeof pbars_lastResetTime === 'undefined' || isInvalidOverride) {
-        pbars_hardmodePercentage = Math.min(100 - ((timeUntilHardmodeMs / (DayMs * 5)) * 100), 100);
-        pbars_resetPercentage = Math.min(100 - ((timeUntilResetMs / (DayMs * 7)) * 100), 100);
-    } else {
-        pbars_hardmodePercentage = Math.min(100 - ((timeUntilHardmodeMs / (hardmodeDate.getTime() - pbars_lastResetTime.getTime())) * 100), 100);
-        pbars_resetPercentage = Math.min(100 - ((timeUntilResetMs / (resetDate.getTime() - pbars_lastResetTime.getTime())) * 100), 100);
-    }
-
-    //document.getElementById("hardmodeBar").style.width = pbars_hardmodePercentage + "%";
-    //document.getElementById("worldResetBar").style.width = pbars_resetPercentage + "%";
-
-    var hardmodeTimeSpanString;
-    if (pbars_hardmodePercentage == 100)
-        hardmodeTimeSpanString = "Hardmode is enabled!";
-    else
-        hardmodeTimeSpanString = pbars_MsToTimeSpanString(timeUntilHardmodeMs);
-
-    $("#hardmodeBar").progress({percent: pbars_hardmodePercentage});
-    $("#worldResetBar").progress({percent: pbars_resetPercentage});
-    document.getElementById("hardmodeText").innerHTML = hardmodeTimeSpanString;
-    document.getElementById("worldResetText").innerHTML = pbars_MsToTimeSpanString(timeUntilResetMs);
+		return result;
+	};
+	
+	$(document).ready(function() {
+		setInterval(updateBars, 5000);
+		setTimeout(updateBars, 500);
+	});
 }
-
-$(document).ready( function() {
-    //pbars_Refresh();>
-    setInterval(pbars_Refresh, 5000);
-    setTimeout(pbars_Refresh, 500);
-});
+autoUpdateDurationBars();
