@@ -9,17 +9,15 @@
                 </h1>
                 <div class="ui orange segment">
                     <h4 class="ui header"><i class="ban icon"></i>Banned Items</h4>
-                    <table class="ui very basic table">
-                        <tr>
-                        {%- for item in banned_items %}
-                            {%- if loop.index0 in range(0, 50, 4) %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                            <td>{{ item }}</td>
-                        {%- endfor %}
-                        </tr>
-                    </table>
+                        <div class="ui four column very compact grid">
+                            {%- for item in banned_items %}
+                                <div class="column">
+                                    <div class="ui center aligned segment">
+                                        {{ item }}
+                                    </div>
+                                </div>
+                                {%- endfor %}
+                        </div>
                 </div>
                 {%- if bans %}
                 <div class="ui red segment">
@@ -47,6 +45,9 @@
                     {%- endfor %}
                 </div>
                 {%- endif %}
+                <div class="ui teal segment"><h4 class="ui header"><i class="area chart icon"></i>Players Statistics</h4>
+                    <embed class="playerstatistics" src="{{ stats_link }}"></embed>
+                </div>
                 {%- if user_data['staff'] %}
                 <div class="ui grey segment">
                     <h4 class="ui header"><i class="tasks icon"></i>Reports</h4>
@@ -67,30 +68,25 @@
                         {%- endfor %}
                     </table>
                 </div>
-                {%- endif %}
-                <div class="ui teal segment"><h4 class="ui header"><i class="area chart icon"></i>Most Online Players</h4>
-                    <div id="stats_server" style="width: 100%; height: 400px"></div>
-                </div>
-                {%- if user_data['user'][1] == 'superadmin' %}
-                    <div class="ui violet segment">
-                <div class="ui accordion">
-                    {% for group in permissions %}
-                        <div class="title"><i class="dropdown icon"></i> <i class="users icon red"></i>{{ group[0] }} <i class="venus mars icon green"></i>{{ group[1] }} <i class="paint brush icon blue"></i>{{ group[3] }} <i class="angle double left icon yellow"></i>{{ group[4] }} <i class="angle double right icon yellow"></i>{{ group[5] }}</div>
-                        <div class="content">
-                        <div class="ui aligned padded grid">
-
-                            {% for permission in group[2].split(',') %}
-                                <div class="four wide white column"><!--<div class="ui compact message">--><p {% if permission.startswith('!') %} style="color: red"{% endif %}>{{ permission }}</p></div><!--</div>-->
-                            {% endfor %}
-
-                        </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                    {%- if permissions %}
+                <div class="ui violet segment"><h4 class="ui header"><i class="unlock alternate icon"></i>Group Permissions</h4>
+                    <div class="ui accordion">
+                        {% for group in permissions %}
+                            <div class="title"><i class="dropdown icon"></i> <i class="users icon red"></i>{{ group[0] }} <i class="venus mars icon green"></i>{{ group[1] }} <i class="paint brush icon blue"></i>{{ group[3] }} <i class="angle double left icon yellow"></i>{{ group[4] }} <i class="angle double right icon yellow"></i>{{ group[5] }}</div>
+                            <div class="content">
+                                <div class="ui aligned padded grid">
+                                    {% for permission in group[2].split(',') %}
+                                    <div class="four wide white column"><p {% if permission.startswith('!') %} style="color: red"{% endif %}>{{ permission }}</p></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="ui red segment"><h4 class="ui header"><i class="bar chart icon"></i>Backup Filesize</h4>
                     <div id="backups" style="width: 100%; height: 400px"></div>
                 </div>
+                    {%- endif %}
                 {%- endif %}
             </div>
             {%- endblock %}

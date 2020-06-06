@@ -30,6 +30,15 @@
     margin: 0 0;
 }
 
+/* Dashboard player statistics */
+.playerstatistics {
+    width: 1000px;
+    height: 320px;
+    border:none;
+    transform: scale(0.9);
+    margin-left: -65px
+}
+
 /* Footer */
 .footer.segment {
     padding: 5em 0em;

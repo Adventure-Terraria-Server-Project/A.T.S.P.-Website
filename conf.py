@@ -34,6 +34,13 @@ world_map = '/home/tshock/map/'
 # Character Render path
 char_render = 'static/img/Char Renders/'
 
+# Item ID files
+items = 'items.csv'
+prefixes = 'prefixes.csv'
+
+# Player statistic link from terraira-servers.com
+stats_link = 'https://terraria-servers.com/statistics/chart/daily/players/7/'
+
 # tShock DB
 class tshock_db():
     ip = '127.0.0.1'

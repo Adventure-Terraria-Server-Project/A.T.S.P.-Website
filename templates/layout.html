@@ -7,7 +7,9 @@
         <meta name="theme-color" content="#a7ff8c">
         <meta name="theme-color" content="#21ba45">
         <meta name="description" content="Adventure Terraria Server with weekly world cycle">
-        <link rel="shortcut icon" href="static/img/favicon.ico">
+        <link rel="icon" href="favicon.ico">
+        <link rel="icon" href="favicon-512.png" sizes="512x512">
+        <meta name="msapplication-TileImage" content="img/favicon-512.png">
 
         <!-- OGP -->
         <meta name="twitter:card" content="summary" />
@@ -21,7 +23,7 @@
         <!-- CSS -->
         {% assets filters="cssmin", output="css/packed.css",
           'css/semantic.min.css', 'css/site.css', 'css/index.css' %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}">
+        <link rel="stylesheet" href="packed.css">
         {% endassets %}
     </head>
     <body>
@@ -87,7 +89,7 @@
             {% endif %}
             {%- if request.path == '/' %}
             <!-- Index - Desktop - Banner -->
-            <div class="ui vertical masthead center aligned segment" style="background-image: url(static/img/screenshots/b_{{ image|random() }}) !important;">
+            <div class="ui vertical masthead center aligned segment" style="background-image: url(screenshots/b_{{ image|random() }}) !important;">
                 {%- if not user_data['mobile'] %}
                 <!-- Navbar - Index - Desktop - Banner -->
                 <div class="ui container">
@@ -126,8 +128,10 @@
                         </div>
                         {%- else %}
                         <div class="row">
-                            <p>Server currently offline.</p>
-                            <p>Please stay tuned!</p>
+                            <div class="ui segment">
+                                <h3 class="ui header">Server currently offline.</h3>
+                                <h3 class="ui header">Please stay tuned!</h3>
+                            </div>
                         </div>
                     {%- endif %}
                     </h2>
@@ -204,24 +208,17 @@
                             <p>We are some doods, who want to provide the best Terraria online experience and it is fun for us to make all this possible for a great community.</p>
                         </div>
                         <div class="three wide column">
-                            <h4 class="ui inverted teal header">Python</h4>
+                            <h4 class="ui inverted teal header">Stuff we use</h4>
                             <div class="ui inverted link list">
-                                <a class="item" target="_blank" href="http://flask.pocoo.org">Flask</a>
-                                <a class="item" target="_blank" href="https://python.org">Python</a>
-                            </div>
-                        </div>
-                        <div class="three wide column">
-                            <h4 class="ui inverted teal header">Webframework</h4>
-                            <div class="ui inverted link list">
-                                <a class="item" target="_blank" href="https://jquery.com">JQuery</a>
-                                <a class="item" target="_blank" href="https://semantic-ui.com/">Semantic UI</a>
-                            </div>
-                        </div>
-                        <div class="three wide column">
-                            <h4 class="ui inverted teal header">Other</h4>
-                            <div class="ui inverted link list">
+                                <a class="item" target="_blank" href="https://github.com/Pryaxis/TShock/">TShock</a>
                                 <a class="item" target="_blank" href="https://terraria.org">Terraria</a>
-                                <a class="item" target="_blank" href="https://github.com/Nama/A.T.S.P.-Website">Source on Github</a>
+                            </div>
+                        </div>
+                        <div class="three wide column">
+                            <h4 class="ui inverted teal header">More stuff we use</h4>
+                            <div class="ui inverted link list">
+                                <a class="item" target="_blank" href="https://terraria-servers.com">Terraria-Servers</a>
+                                <a class="item" target="_blank" href="https://www.tserverweb.com/">TServerWeb</a>
                             </div>
                         </div>
                     </div>
@@ -231,127 +228,11 @@
         <!-- JavaScript -->
         {% assets filters="jsmin", output="js/packed.js",
           'js/jquery.min.js', 'js/moment.min.js', 'js/semantic.min.js', 'js/site.js', 'js/index.js', 'js/oldworlds.js' %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        <script type="text/javascript" src="packed.js"></script>
         {% endassets %}
-        {%- if stats_server or backups %}
-        <script src="static/js/highstock.js"></script>
-        {%- endif %}
-        {%- if stats_server %}
-        <script type="text/javascript"><!--
-            $(function () {
-                $('#stats_server').highcharts({
-                    chart: { type: 'areaspline' },
-                    title: { text: '' },
-                    rangeSelector: {
-                        enabled: true,
-                        selected: 0,
-                        buttons: [{
-                            text: '1d',
-                            type: 'day',
-                            count: 1,
-                        },
-                        {
-                            text: '1w',
-                            type: 'day',
-                            count: 7,
-                        },
-                        {
-                            text: '1m',
-                            type: 'month',
-                            count: 1,
-                        },
-                        {
-                            text: '1y',
-                            type: 'year',
-                            count: 1,
-                        },
-                        {
-                            text: 'All',
-                            type: 'all',
-                            count: 1,
-                        }],
-                        buttonTheme: { style: { width: '120px' }},
-                    },
-                    xAxis: { type: 'datetime', range: 1 * 24 * 3600 * 1000 },
-                    yAxis: [{ // Regular Users Axis
-                        title: { text: 'Peak Online Users' },
-                        allowDecimals: false,
-                        min: 0,
-                    },
-                    { // Staff Axis
-                            title: { text: 'Staff Users' },
-                            allowDecimals: false,
-                            min: 0,
-                            opposite: true,
-                        }],
-                    legend: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'Total Users',
-                        color: '#00ff18',
-                        lineWidth: 1,
-                        marker: { symbol: "circle", radius: 3 },
-                        data: {{stats_server[0]}},
-                        fillColor : {
-                            linearGradient : {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops : [
-                                [0, '#b3ffba'],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                            ]
-                        }
-                    },
-                    {
-                        name: 'Moderators',
-                        color: '#dc6e28',
-                        lineWidth: 1,
-                        yAxis: 1,
-                        marker: { symbol: "circle", radius: 3 },
-                        data: {{stats_server[1]}},
-                        fillColor : {
-                            linearGradient : {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops : [
-                                [0, '#ff8635'],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                            ]
-                        }
-                    },
-                    {
-                        name: 'Administrators',
-                        color: '#c85050',
-                        lineWidth: 1,
-                        yAxis: 1,
-                        marker: { symbol: "circle", radius: 3 },
-                        data: {{stats_server[2]}},
-                        fillColor : {
-                            linearGradient : {
-                                 x1: 0,
-                                 y1: 0,
-                                 x2: 0,
-                                 y2: 1
-                            },
-                            stops : [
-                                [0, '#ff6767'],
-                                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                            ]
-                        }
-                    }]
-                });
-            });
-        --></script>
-        {%- endif %}
         {%- if backups and user_data['user'][1] == 'superadmin' %}
-        <script type="text/javascript"><!--
+            <script src="highstock.js"></script>
+            <script type="text/javascript"><!--
             $(function () {
                 $('#backups').highcharts({
                     chart: { type: 'areaspline' },

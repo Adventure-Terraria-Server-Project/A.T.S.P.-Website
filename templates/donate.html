@@ -9,7 +9,7 @@
                 </h1>
                 {%- if not current_user.is_active %}
                 <div class="ui red inverted segment"><strong>Attention!</strong> You need to be <strong>logged in</strong> to donate. Click on "Login" and type in your <strong>ingame nick and password</strong> and visit this site again.</div>
-                {%- endif %}
+                {%- else %}
                 <div class="ui segment">
                     <div class="ui teal segment">
                         <h4>Donate with a PayPal Account</h4>
@@ -28,10 +28,11 @@
                         </ol>
                     </div>
                 </div>
-                {%- if user_data['staff'] %}
-                    {%- for user in donated %}
+                    {%- if donated %}
+                        {%- for user in donated %}
                 <span style="color:green">{{ user[0] }}</span> <span style="color:blue">{{ user[1] }}</span><br>
-                    {%- endfor %}
+                        {%- endfor %}
+                    {%- endif %}
                 {%- endif %}
             </div>
             {%- endblock %}

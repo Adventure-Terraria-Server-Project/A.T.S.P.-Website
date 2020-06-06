@@ -79,83 +79,63 @@
                             <div class="ui styled fluid green accordion">
                                 <div class="title color_blue"><i class="dropdown icon"></i> VIP</div>
                                 <div class="content">
-                                    <table class="ui very basic table">
-                                        <tbody>
-                                            <tr>
-                                            {%- for user in groups['vips'] %}
-                                                {%- if loop.index0 in range(5, 1000, 5) %}
-                                            </tr>
-                                            <tr>
-                                                {%- endif %}
-                                                <td style="color:{{ user[0] }}">{{ user[1] }}</td>
-                                            {%- endfor %}
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="ui four column very compact grid">
+                                        {%- for user in groups['vips'] %}
+                                        <div class="column">
+                                            <div class="ui {{ user[0] }} inverted center aligned segment">
+                                                {{ user[1] }}
+                                            </div>
+                                        </div>
+                                        {%- endfor %}
+                                    </div>
                                 </div>
                                 <div class="title color_green"><i class="dropdown icon"></i> Builder</div>
                                 <div class="content">
-                                    <table class="ui very basic table">
-                                        <tbody>
-                                            <tr>
-                                            {%- for user in groups['builder'] %}
-                                                {%- if loop.index0 in range(5, 1000, 5) %}
-                                            </tr>
-                                            <tr>
-                                                {%- endif %}
-                                                <td>{{ user }}</td>
-                                            {%- endfor %}
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="ui four column very compact grid">
+                                        {%- for user in groups['builder'] %}
+                                        <div class="column">
+                                            <div class="ui center aligned basic fitted segment">
+                                                {{ user }}
+                                            </div>
+                                        </div>
+                                        {%- endfor %}
+                                    </div>
                                 </div>
                                 <div class="title color_orange"><i class="dropdown icon"></i> Moderator</div>
                                 <div class="content">
-                                    <table class="ui very basic table">
-                                        <tbody>
-                                            <tr>
+                                    <div class="ui three column very compact grid">
                                             {%- for user in groups['newadmins'] %}
-                                                {%- if loop.index0 in range(5, 1000, 5) %}
-                                            </tr>
-                                            <tr>
-                                                {%- endif %}
-                                                <td>{{ user }}</td>
-                                            {%- endfor %}
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <div class="column">
+                                            <div class="ui center aligned basic fitted segment">
+                                                {{ user }}
+                                            </div>
+                                        </div>
+                                        {%- endfor %}
+                                    </div>
                                 </div>
                                 <div class="title color_red"><i class="dropdown icon"></i> Administrator</div>
                                 <div class="content">
-                                    <table class="ui very basic table">
-                                        <tbody>
-                                            <tr>
+                                    <div class="ui three column very compact grid">
                                             {%- for user in groups['admins'] %}
-                                                {%- if loop.index0 in range(5, 1000, 5) %}
-                                            </tr>
-                                            <tr>
-                                                {%- endif %}
-                                                <td>{{ user }}</td>
-                                            {%- endfor %}
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <div class="column">
+                                            <div class="ui center aligned basic fitted segment">
+                                                {{ user }}
+                                            </div>
+                                        </div>
+                                        {%- endfor %}
+                                    </div>
                                 </div>
                                 <div class="title color_black"><i class="dropdown icon"></i> Executive</div>
                                 <div class="content">
-                                    <table class="ui very basic table">
-                                        <tbody>
-                                            <tr>
+                                    <div class="ui three column very compact grid">
                                             {%- for user in groups['superadmins'] %}
-                                                {%- if loop.index0 in range(5, 1000, 5) %}
-                                            </tr>
-                                            <tr>
-                                                {%- endif %}
-                                                <td>{{ user }}</td>
-                                            {%- endfor %}
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <div class="column">
+                                            <div class="ui center aligned basic fitted segment">
+                                                {{ user }}
+                                            </div>
+                                        </div>
+                                        {%- endfor %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

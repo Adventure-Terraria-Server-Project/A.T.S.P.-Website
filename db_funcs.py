@@ -7,6 +7,7 @@
 
 import csv
 import cymysql
+import conf
 
 from conf import tshock_db
 from datetime import timedelta
@@ -74,27 +75,6 @@ def get_login(username):
 
 ###############################################################################
 #                                                                             #
-'''Server User Stats in Dash'''                                               #
-#                                                                             #
-###############################################################################
-
-
-def server_stats():
-    conn, cur = db_con()
-    totaluser = []
-    totalnewadmin = []
-    totaladmin = []
-    cur.execute('SELECT * FROM `Utils_ServerStatistics`')
-    for r in cur.fetchall():
-        totaluser.append([r[0] * 1000, r[1]])
-        totalnewadmin.append([r[0] * 1000, r[2]])
-        totaladmin.append([r[0] * 1000, r[3]])
-    db_close(conn, cur)
-    return (totaluser, totalnewadmin, totaladmin)
-
-
-###############################################################################
-#                                                                             #
 '''Show group permission for superadmin'''                                    #
 #                                                                             #
 ###############################################################################
@@ -146,16 +126,16 @@ def banlist():
 def dash_banned(user):
     conn, cur = db_con()
     ban = list()
-    cur.execute('SELECT * FROM `bannedplayer` WHERE `Player` = %s order by `UnbanDate` ASC', (user))
+    cur.execute('SELECT * FROM `bannedplayer` WHERE `Player` = %s order by `BanDate` DESC', (user))
     r = cur.fetchone()
     if r:
         ban.append(r[0])
         ban.append(r[3])
         ban.append(r[4])
-        if int(r[2]) == 0:
+        if r[2] == 0:
             ban.append('PermaBan')
-        elif int(r[2]) > time():
-            btime = int(r[2]) - time()
+        elif r[2] > time():
+            btime = r[2] - time()
             ban.append(format_timedelta(timedelta(seconds=btime)))
         else:
             ban = None
@@ -259,7 +239,10 @@ def get_player_inv(username):
         conn, cur = db_con()
         cur.execute('SELECT `Inventory`,`MaxHealth`,`MaxMana` FROM `tsCharacter` WHERE `Account` = %s LIMIT 1', (user[2]))
         user_info = cur.fetchone()
-        user_inv = inv_pars(user_info[0])
+        if user_info:
+            user_inv = inv_pars(user_info[0])
+        else:
+            return None
         group = user[1]
         db_close(conn, cur)
         return {'inv': user_inv, 'health': user_info[1], 'mana': user_info[2], 'group': group}
@@ -267,57 +250,75 @@ def get_player_inv(username):
 
 def inv_pars(inventorystring):
     inventoryentries = inventorystring.split('~')
-    count_inv = 0
     items = dict()
     prefixes = dict()
     inv = dict()
     inv['inv'] = list()
     inv['coins'] = list()
     inv['ammo'] = list()
+    inv['armor'] = list()
     inv['vanity'] = list()
+    inv['dye'] = list()
     inv['equipment'] = list()
+    inv['eqdye'] = list()
     inv['piggy'] = list()
     inv['safe'] = list()
     inv['trash'] = ''
     inv['forge'] = list()
+    inv['void'] = list()
 
-    with open('items.tsv') as itemsfile:
+    with open(conf.items) as itemsfile:
         itemsreader = csv.reader(itemsfile, delimiter=',', quotechar='"')
         for row in itemsreader:
             items.update({row[0]: {'name': row[1]}})
 
-    with open('prefixes.tsv') as prefixfile:
+    with open(conf.prefixes) as prefixfile:
         prefixreader = csv.reader(prefixfile, delimiter=',', quotechar='"')
         for row in prefixreader:
             prefixes.update({row[0]: {'name': row[1]}})
 
-    for row in inventoryentries:
+    for count_inv, row in enumerate(inventoryentries):
         itemid, amount, prefixid = row.split(',')
         if count_inv <= 50:
             try:
                 inv['inv'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
             except KeyError:
                 inv['inv'].append(0)
-        elif count_inv <= 58:
+        elif count_inv <= 53:
             try:
                 inv['coins'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
             except KeyError:
                 inv['coins'].append(0)
-        elif count_inv <= 78:
+        elif count_inv <= 58:
             try:
                 inv['ammo'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
             except KeyError:
                 inv['ammo'].append(0)
-        elif count_inv <= 88:
+        elif count_inv <= 68:
+            try:
+                inv['armor'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['armor'].append(0)
+        elif count_inv <= 78:
             try:
                 inv['vanity'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
             except KeyError:
                 inv['vanity'].append(0)
-        elif count_inv <= 98:
+        elif count_inv <= 88:
+            try:
+                inv['dye'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['dye'].append(0)
+        elif count_inv <= 93:
             try:
                 inv['equipment'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
             except KeyError:
                 inv['equipment'].append(0)
+        elif count_inv <= 98:
+            try:
+                inv['eqdye'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['eqdye'].append(0)
         elif count_inv <= 138:
             try:
                 inv['piggy'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
@@ -338,7 +339,11 @@ def inv_pars(inventorystring):
                 inv['forge'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
             except KeyError:
                 inv['forge'].append(0)
-        count_inv += 1
+        else:
+            try:
+                inv['void'].append((prefixes.get(prefixid, {}).get('name', ''), items[itemid]['name'], itemid, amount))
+            except KeyError:
+                inv['void'].append(0)
 
     return inv
 
@@ -353,7 +358,7 @@ def inv_pars(inventorystring):
 def lgroups():
     conn, cur = db_con()
     viplist = list()
-    g_colors = {'vip': '#3ec0ff', 'vip+': '#35ab75', 'vip++': '#ff9c00', 'supervip': '#467dff'}
+    g_colors = {'vip': 'blue', 'vip+': 'green', 'vip++': 'orange', 'supervip': 'violet'}
     cur.execute('SELECT `Username`,`Usergroup` FROM `Users` WHERE `Usergroup` in ("vip", "vip+", "vip++", "supervip")')
     for r in cur.fetchall():
         viplist.append([g_colors.get(r[1], '#467dff'), r[0]])

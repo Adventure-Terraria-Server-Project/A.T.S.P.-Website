@@ -13,7 +13,7 @@ $('.ui.sticky').sticky({
     pushing: true
 });
 // Make Login Modal work
-$('.modal.login').modal('attach events', '.login_button', 'show');
+$('.modal.login').modal({blurring: true}).modal('attach events', '.login_button', 'show');
 // create sidebar and attach to menu open
 $('.ui.sidebar').sidebar('attach events', '.toc.item');
 // fix menu when passed

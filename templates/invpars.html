@@ -10,141 +10,200 @@
                 {%- if inv %}
                 <h3><i class="user icon"></i>{{ p_list }} <i class="heart icon"></i>{{ inv['health'] }} <i class="star icon"></i>{{ inv['mana'] }} <i class="users icon"></i>{{ inv['group'] }}</h3>
                 <div class="ui segment">
-                    <table class="ui blue fixed celled table">
-                        <thead>
-                        <tr><th colspan="10"><div class="ui blue label">Inventory</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['inv'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index in (10, 20, 30, 40, 50) %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <table class="ui yellow fixed celled table">
-                        <thead>
-                            <tr><th colspan="10"><div class="ui yellow label">Coins and Ammo</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['coins'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index == 10 %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <table class="ui green fixed celled table">
-                        <thead>
-                            <tr><th colspan="10"><div class="ui green label">Vanity</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['vanity'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index == 10 %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <table class="ui orange fixed celled table">
-                        <thead>
-                            <tr><th colspan="10"><div class="ui orange label">Equipment</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['equipment'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index == 10 %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <table class="ui red fixed celled table">
-                        <thead>
-                            <tr><th colspan="10"><div class="ui red label">Piggy Bank</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['piggy'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <table class="ui grey fixed celled table">
-                        <thead>
-                            <tr><th colspan="10"><div class="ui grey label">Safe</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['safe'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <table class="ui pink fixed celled table">
-                        <thead>
-                            <tr><th colspan="10"><div class="ui pink label">Forge</div></th></tr>
-                        </thead>
-                        <tr>
-                        {%- for item in inv['inv']['forge'] %}
-                            <td>
-                            {%- if item != 0 %}
-                                <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui floating label">{{ item[3] }}</div>
-                            {%- endif %}
-                            </td>
-                            {%- if loop.index == 10 or loop.index == 20 or loop.index == 30 %}
-                        </tr>
-                        <tr>
-                            {%- endif %}
-                        {%- endfor %}
-                        </tr>
-                    </table>
-                    <div class="ui grey segment">
-                        <h3 class="ui header">Trash</h3>
-                        {%- set item = inv['inv']['trash'] %}
+                    <div class="ui blue top attached label">Inventory</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['inv'] %}
+                        <div class="column">
                         {%- if item != 0 %}
-                            <img title="{{ item[0] }} {{ item[1] }}" src="items/Item_{{ item[2] }}.png" alt="{{ item[0] }} {{ item[1] }}"><div class="ui circular label">{{ item[3] }}</div>
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
                         {%- endif %}
+                        </div>
+                    {%- endfor %}
                     </div>
-                    {%- endif %}
                 </div>
+                <div class="ui segment">
+                    <div class="ui yellow top attached label">Coins</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['coins'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui olive top attached label">Ammo</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['ammo'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui black top attached label">Armor</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['armor'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui teal top attached label">Vanity Armor</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['vanity'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui pink top attached label">Dye</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['dye'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui green top attached label">Equipment</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['equipment'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui purple top attached label">Equipment Dye</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['eqdye'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui red top attached label">Piggy Bank</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['piggy'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui grey top attached label">Safe</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['safe'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui brown top attached label">Forge</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['forge'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui orange top attached label">Void</div>
+                    <div class="ui ten column very compact grid">
+                    {%- for item in inv['inv']['void'] %}
+                        <div class="column">
+                        {%- if item != 0 %}
+                            <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                                <img src="items/Item_{{ item[2] }}.png">
+                                <div class="ui floating circular label">{{ item[3] }}</div>
+                            </div>
+                        {%- endif %}
+                        </div>
+                    {%- endfor %}
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui grey top attached label">Trash</div>
+                    <div class="ui ten column very compact grid">
+                    {%- set item = inv['inv']['trash'] %}
+                        <div class="column">
+                    {%- if item != 0 %}
+                        <div class="ui center aligned basic segment" data-tooltip="{{ item[0] }} {{ item[1] }}">
+                            <img src="items/Item_{{ item[2] }}.png">
+                            <div class="ui floating circular label">{{ item[3] }}</div>
+                        </div>
+                    {%- endif %}
+                    </div>
+                </div>
+                {%- endif %}
             </div>
-            <br>
-            {%- endblock %}
+        </div>
+        <br>
+        {%- endblock %}

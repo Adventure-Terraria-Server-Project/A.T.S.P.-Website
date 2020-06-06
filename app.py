@@ -45,7 +45,6 @@ from db_funcs import item_bans
 from db_funcs import lgroups
 from db_funcs import msg
 from db_funcs import search_user
-from db_funcs import server_stats
 from db_funcs import group_permissions
 from more_funcs import *
 
@@ -149,19 +148,21 @@ def dash():
     # Get User-Info and Recent Online Users
     user_data = get_data('dash')
 
-    stats_server = server_stats()
-    permissions = group_permissions()
     banned_items = item_bans()
-    reports = get_reports()
+
+    reports = None
+    backups = None
+    permissions = None
+    if user_data['staff']:
+        reports = get_reports()
     if user_data['user'][1] == 'superadmin':
         backups = backup_size()
-    else:
-        backups = None
+        permissions = group_permissions()
 
     bans = dash_banned(user_data['user'][0])
     msgs = msg(user_data['user'][0])
 
-    return render_template('dash.html', user_data=user_data, name=name, stats_server=stats_server, banned_items=banned_items, bans=bans, msgs=msgs, backups=backups, reports=reports, permissions=permissions)
+    return render_template('dash.html', user_data=user_data, name=name, banned_items=banned_items, bans=bans, msgs=msgs, backups=backups, reports=reports, permissions=permissions, stats_link=conf.stats_link)
 
 
 ###############################################################################
@@ -199,8 +200,6 @@ def invpars():
     # Get User-Info and Recent Online Users
     user_data = get_data('invparser')
 
-    inv = None
-    search_nick = None
     if user_data['staff'] and request.args.get('user'):
         search_nick = request.args.get('user')
         inv = get_player_inv(search_nick)
@@ -353,7 +352,9 @@ def donate():
     # Get User-Info and Recent Online Users
     user_data = get_data('donate')
 
-    donated = donate_read()
+    donated = None
+    if user_data['staff']:
+        donated = donate_read()
 
     return render_template('donate.html', user_data=user_data, name=name, donated=donated)
 
@@ -399,6 +400,7 @@ def show_world():
         return send_from_directory(conf.world_map, 'world-now.png')
     else:
         return redirect(url_for('not_found', _scheme='https', _external='True'))
+
 
 ###############################################################################
 #                                                                             #
@@ -449,6 +451,7 @@ def create_sig(user):
             pass
     return redirect(url_for('not_found', _scheme='https', _external='True'))
 
+
 ###############################################################################
 #                                                                             #
 '''View for Avatar and Signature'''                                           #
@@ -480,7 +483,6 @@ def embed():
 
 
 @app.route('/privacy-policy')
-@flask_optimize.optimize(cache=False)
 def policy():
     # Get User-Info and Recent Online Users
     user_data = get_data('policy')
