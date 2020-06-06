@@ -78,3 +78,9 @@ class sig():
     nick_size = 20
     group_font = 'fonts/Comfortaa.ttf'
     group_size = 12
+
+
+try:
+    from conf_local import *
+except ImportError:
+    pass
