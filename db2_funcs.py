@@ -5,7 +5,10 @@
 ###############################################################################
 
 
-import cymysql
+try:
+    import cymysql as Sql
+except ImportError:
+    import MySQLdb as Sql
 
 from conf import website_db
 from time import gmtime
@@ -20,13 +23,13 @@ db_pw = website_db.pw
 
 ###############################################################################
 #                                                                             #
-'''Databse-connect and close'''                                               #
+'''Database-connect and close'''                                               #
 #                                                                             #
 ###############################################################################
 
 
 def db_con():
-    conn = cymysql.connect(host=db_host, port=db_port, user=db_user, passwd=db_pw, db=db)
+    conn = Sql.connect(host=db_host, port=db_port, user=db_user, passwd=db_pw, db=db, autocommit=True)
     cur = conn.cursor()
     return conn, cur
 
@@ -47,14 +50,13 @@ def donate_save(nick):
     conn, cur = db_con()
     time = strftime('%Y.%m.%d - %H:%M:%S', gmtime())
     cur.execute('INSERT INTO `donate` (`time`, `user`) VALUES (%s, %s)', (time, nick))
-    conn.commit()
     db_close(conn, cur)
 
 
 def donate_read():
     conn, cur = db_con()
     cur.execute('SELECT * FROM `donate` ORDER BY `time` DESC LIMIT 20')
-    nicks = list()
+    nicks = []
     for r in cur.fetchall():
         nicks.append([r[0], r[1]])
 
@@ -72,14 +74,13 @@ def donate_read():
 def shorturl_save(surl, url):
     conn, cur = db_con()
     cur.execute('INSERT INTO `shorturls` (`surl`, `url`) VALUES (%s, %s)', (surl, url))
-    conn.commit()
     db_close(conn, cur)
 
 
 def shorturl_read():
     conn, cur = db_con()
     cur.execute('SELECT * FROM `shorturls`')
-    urls = list()
+    urls = []
     for r in cur.fetchall():
         urls.append([r[0], r[0], r[1]])
 
@@ -96,8 +97,8 @@ def shorturl_read():
 
 def get_old_worlds(item):
     conn, cur = db_con()
-    sql = 'SELECT * FROM `oldworlds` ORDER BY `date` DESC LIMIT {0}, {1}'.format(item, 20)
-    cur.execute(sql)
+    sql = 'SELECT * FROM `oldworlds` ORDER BY `date` DESC LIMIT %s, %s'
+    cur.execute(sql, (item, 20))
     worlds = cur.fetchall()
 
     db_close(conn, cur)
@@ -126,4 +127,4 @@ def backup_size():
             htdocs.append([r[0] * 1000, r[2]])
 
     db_close(conn, cur)
-    return (dbtshock, tserver, htdocs)
+    return dbtshock, tserver, htdocs
