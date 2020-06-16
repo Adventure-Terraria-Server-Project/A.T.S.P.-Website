@@ -6,7 +6,10 @@
 
 
 import csv
-import cymysql
+try:
+    import cymysql as Sql
+except ImportError:
+    import MySQLdb as Sql
 import conf
 
 from conf import tshock_db
@@ -23,13 +26,13 @@ db_pw = tshock_db.pw
 
 ###############################################################################
 #                                                                             #
-'''Databse-connect and close'''                                               #
+'''Database-connect and close'''                                               #
 #                                                                             #
 ###############################################################################
 
 
 def db_con():
-    conn = cymysql.connect(host=db_host, port=db_port, user=db_user, passwd=db_pw, db=db)
+    conn = Sql.connect(host=db_host, port=db_port, user=db_user, passwd=db_pw, db=db, autocommit=True)
     cur = conn.cursor()
     return conn, cur
 
@@ -99,8 +102,8 @@ def group_permissions():
 
 def banlist():
     conn, cur = db_con()
-    ipban = list()
-    nickban = list()
+    ipban = []
+    nickban = []
     cur.execute('SELECT * FROM `BannedIP` ORDER BY `BanDate` DESC')
     for r in cur.fetchall():
         btime = r[2] - time()
@@ -125,7 +128,7 @@ def banlist():
 
 def dash_banned(user):
     conn, cur = db_con()
-    ban = list()
+    ban = []
     cur.execute('SELECT * FROM `bannedplayer` WHERE `Player` = %s order by `BanDate` DESC', (user))
     r = cur.fetchone()
     if r:
@@ -160,7 +163,7 @@ def format_timedelta(td):
 
 def msg(user):
     conn, cur = db_con()
-    msgs = list()
+    msgs = []
     cur.execute('SELECT `mailFrom`,`mailText` FROM `messageplugin` WHERE `mailTo` = %s and `Seen` = 0', (user))
     for r in cur.fetchall():
         msgs.append([r[0], r[1]])
@@ -177,7 +180,7 @@ def msg(user):
 
 def item_bans():
     conn, cur = db_con()
-    banned_items = list()
+    banned_items = []
     cur.execute('SELECT `ItemName` FROM `ItemBans`')
     for r in cur.fetchall():
         banned_items.append(r[0])
@@ -195,13 +198,10 @@ def item_bans():
 def get_reports():
     conn, cur = db_con()
     cur.execute('SELECT `ReportID`,`UserID`,`ReportedID`,`Message` FROM `Reports` WHERE `state` != 2')
-    reports = list()
+    reports = []
     for r in cur.fetchall():
         userID = get_user_by_id(r[1])[0]
-        if r[2] != -1:
-            reportedID = get_user_by_id(r[2])[0]
-        else:
-            reportedID = 'Unknown ID'
+        reportedID = get_user_by_id(r[2])[0] if r[2] != -1 else 'Unknown ID'
         try:
             reports.append([r[0], userID, reportedID, r[3]])
         except TypeError:
@@ -218,7 +218,7 @@ def get_reports():
 
 def search_user(user):
     conn, cur = db_con()
-    results = list()
+    results = []
     search = '%{}%'.format(user)
     cur.execute('SELECT `Username` FROM `Users` WHERE `Username` LIKE %s LIMIT 50', (search))
     for r in cur.fetchall():
@@ -250,22 +250,23 @@ def get_player_inv(username):
 
 def inv_pars(inventorystring):
     inventoryentries = inventorystring.split('~')
-    items = dict()
-    prefixes = dict()
-    inv = dict()
-    inv['inv'] = list()
-    inv['coins'] = list()
-    inv['ammo'] = list()
-    inv['armor'] = list()
-    inv['vanity'] = list()
-    inv['dye'] = list()
-    inv['equipment'] = list()
-    inv['eqdye'] = list()
-    inv['piggy'] = list()
-    inv['safe'] = list()
-    inv['trash'] = ''
-    inv['forge'] = list()
-    inv['void'] = list()
+    items = {}
+    prefixes = {}
+    inv = {
+        'inv': [],
+        'coins': [],
+        'ammo': [],
+        'armor': [],
+        'vanity': [],
+        'dye': [],
+        'equipment': [],
+        'eqdye': [],
+        'piggy': [],
+        'safe': [],
+        'trash': '',
+        'forge': [],
+        'void': [],
+    }
 
     with open(conf.items) as itemsfile:
         itemsreader = csv.reader(itemsfile, delimiter=',', quotechar='"')
@@ -363,27 +364,31 @@ def lgroups():
     for r in cur.fetchall():
         viplist.append([g_colors.get(r[1], '#467dff'), r[0]])
 
-    builderlist = list()
+    builderlist = []
     cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` in ("builder", "trustedbuilder")')
     for r in cur.fetchall():
         builderlist.append(r[0])
 
-    newadminlist = list()
+    newadminlist = []
     cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` = "newadmin"')
     for r in cur.fetchall():
         newadminlist.append(r[0])
 
-    adminlist = list()
+    adminlist = []
     cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` in ("admin", "admin+")')
     for r in cur.fetchall():
         adminlist.append(r[0])
 
-    sadminlist = list()
+    sadminlist = []
     cur.execute('SELECT `Username` FROM `Users` WHERE `Usergroup` = "superadmin"')
     for r in cur.fetchall():
         sadminlist.append(r[0])
 
-    groups = {'vips': viplist, 'builder': builderlist, 'newadmins': newadminlist, 'admins': adminlist, 'superadmins': sadminlist}
-
     db_close(conn, cur)
-    return groups
+    return {
+        'vips': viplist,
+        'builder': builderlist,
+        'newadmins': newadminlist,
+        'admins': adminlist,
+        'superadmins': sadminlist,
+    }
